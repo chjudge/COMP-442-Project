@@ -5,7 +5,7 @@
 <html lang="en">
 
 <head>
-  <title>Title</title>
+  <title>Register</title>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -18,13 +18,14 @@
 
 <body>
 
-  {% block content%}
   <main class=container>
-    {{wtf.quick_form(form)}}
-
-  </main>
+  {% block content%}
+    <div id="formDiv" class="container">
+      {{wtf.quick_form(form)}}
+    </div>
   {% endblock %}
 
+  </main>
 
 
 

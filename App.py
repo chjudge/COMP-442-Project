@@ -68,7 +68,14 @@ def get_register():
 
 @app.get('/login/')
 def get_login():
-    pass
+    l_form = LoginForm()
+    return render_template('register.html', form=l_form)
+
+
+
+
+
+
 
 @app.get('/')
 def index():
