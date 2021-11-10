@@ -19,21 +19,8 @@
 <body>
 
   {% block content%}
-  {{wtf.quick_form(form)}}
   <main class=container>
-    <form action="#" method="post">
-      {{form.hidden_tag()}}
-      {{form.email.label}}
-      {{form.email()}}
-      
-      {{form.password.label}}
-      {{form.password()}}
-
-      {{form.confirm_password.label}}
-      {{form.confirm_password()}}
-      
-      {{form.submit()}}
-    </form>
+    {{wtf.quick_form(form)}}
 
   </main>
   {% endblock %}
