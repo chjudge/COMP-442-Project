@@ -46,6 +46,9 @@ def user_loader(id):
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.Unicode, nullable=False)
+    fname = db.Column(db.Unicode, nullable=False)
+    lname = db.Column(db.Unicode, nullable=False)
+    admin = db.Column(db.Boolean, nullable=False, default=False)
     password_hash = db.Column(db.LargeBinary)  # hash is a binary attribute
 
     # make a write-only password property that just updates the stored hash
@@ -87,7 +90,7 @@ def post_register():
 
         if user is None:
             print('creating user')
-            user = User(email=r_form.email.data, password=r_form.password.data)
+            user = User(email=r_form.email.data, password=r_form.password.data, fname=r_form.fname.data, lname=r_form.lname.data)
             db.session.add(user)
             db.session.commit()
             return redirect(url_for('get_login'))
@@ -133,6 +136,7 @@ def post_login():
 
 @app.get('/')
 def index():
+    print(current_user.email)
     return render_template('index.html', current_user=current_user)
 
 @app.get('/logout/')
@@ -141,3 +145,18 @@ def get_logout():
     logout_user()
     flash('You have been logged out')
     return redirect(url_for('index'))
+
+@app.get('/profile/')
+@login_required
+def get_profile():
+    return render_template('profile.html', user=current_user)
+
+# @app.get('/admin')
+# @login_required
+# def get_admin_page():
+#     print(current_user.admin)
+#     if current_user.admin:
+#         users = User.query.all()
+#         return render_template('admin.html', user=current_user, users=users)
+#     else:
+#         redirect(request.args.get('next'))

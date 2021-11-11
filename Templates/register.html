@@ -39,6 +39,8 @@
       {{form.hidden_tag()}}
       <div class="form-group">
         {{ wtf.form_field(form.email, type='email', class='form-control', placeholder='Email Address') }}
+        {{ wtf.form_field(form.fname, type='text', class='form-control', placeholder='First Name') }}
+        {{ wtf.form_field(form.lname, type='text', class='form-control', placeholder='Last Name') }}
         {{ wtf.form_field(form.password, type='password', class='form-control', placeholder='Password') }}
         {{ wtf.form_field(form.confirm_password, type='password', class='form-control', placeholder='Confirm Password') }}
       </div>
