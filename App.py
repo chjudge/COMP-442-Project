@@ -136,7 +136,7 @@ def post_login():
 
 @app.get('/')
 def index():
-    print(current_user.email)
+    # print(current_user.email)
     return render_template('index.html', current_user=current_user)
 
 @app.get('/logout/')
