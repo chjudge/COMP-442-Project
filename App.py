@@ -5,7 +5,6 @@ from flask import Flask, render_template, url_for, redirect, request, session, f
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, LoginManager, login_required
 from flask_login import login_user, logout_user, current_user
-from flask_bootstrap import Bootstrap
 
 # Make sure this directory is in your Python path for imports
 scriptdir = os.path.dirname(os.path.abspath(__file__))
@@ -31,7 +30,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Getting the database object handle from the app
 db = SQLAlchemy(app)
-Bootstrap(app)
 
 # Prepare and connect the LoginManager to this app
 app.login_manager = LoginManager()
@@ -136,7 +134,6 @@ def post_login():
 
 @app.get('/')
 def index():
-    # print(current_user.email)
     return render_template('index.html', current_user=current_user)
 
 @app.get('/logout/')
@@ -151,12 +148,12 @@ def get_logout():
 def get_profile():
     return render_template('profile.html', user=current_user)
 
-# @app.get('/admin')
-# @login_required
-# def get_admin_page():
-#     print(current_user.admin)
-#     if current_user.admin:
-#         users = User.query.all()
-#         return render_template('admin.html', user=current_user, users=users)
-#     else:
-#         redirect(request.args.get('next'))
+@app.get('/admin')
+@login_required
+def get_admin_page():
+    print(current_user.get_id())
+    if User.query.filter_by(id=current_user.get_id()).first().admin:
+        users = User.query.all()
+        return render_template('admin.html', user=current_user, users=users)
+    else:
+        return redirect(url_for('index'))

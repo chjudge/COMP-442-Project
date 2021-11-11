@@ -15,7 +15,7 @@
         <h3>Welcome {{user.fname}} {{user.lname}}!</h3>
       </header>
       <main>
-        <h3>{% if user.admin != None %}
+        <h3>{% if user.admin != False %}
           You are an admin
           {% endif %}
         </h3>
