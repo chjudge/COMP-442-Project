@@ -160,6 +160,19 @@ def get_profile():
     user_profile = UserProfile.query.filter_by(user_id=current_user.get_id()).first()
     return render_template('profile.html', user=current_user, profile=user_profile)
 
+@app.post('/profile/')
+@login_required
+def post_profile():
+    bio = request.form.get('bio')
+    print(f'bio update: "{bio}"')
+
+
+
+    user_profile = UserProfile.query.filter_by(user_id=current_user.get_id()).first()
+    user_profile.bio = bio
+    db.session.commit()
+    return redirect(url_for('get_profile'))
+
 @app.get('/admin')
 @login_required
 def get_admin_page():
