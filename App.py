@@ -134,7 +134,7 @@ def post_login():
 
 @app.get('/')
 def index():
-    return render_template('index.html', current_user=current_user)
+    return render_template('index.html', user=current_user)
 
 @app.get('/logout/')
 @login_required

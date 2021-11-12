@@ -24,9 +24,9 @@
       </div>
     </header>
     <main>
-      {% if current_user.is_authenticated %}
-        <h1>Logged in as {{current_user.email}}</h1>
-        {% if current_user.admin == 1 %}
+      {% if user.is_authenticated %}
+        <h1>Logged in as {{user.email}}</h1>
+        {% if user.admin == True %}
           <a href="/admin"> Admin Page </a>
         {% endif %}
       {% else %}
@@ -39,8 +39,10 @@
       &emsp;&emsp;&emsp;&emsp;&emsp;
       <a href="/login"> Login </a>
       &emsp;&emsp;&emsp;&emsp;&emsp;
+      {% if user.is_authenticated %}
       <a href="/logout"> Logout </a>
       &emsp;&emsp;&emsp;&emsp;&emsp;
+      {% endif %}
       <a href="/profile"> Profile </a>
       <br>
     </footer>
