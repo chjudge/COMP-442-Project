@@ -1,3 +1,5 @@
 __pycache__/
 checkpwd.py
-users.sqlite3
+mkadmin.py
+*.sqlite3
+*.sqlite3-journal
