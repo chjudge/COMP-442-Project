@@ -12,16 +12,16 @@
   </head>
   <body>
       <header>
-        <h3>Welcome {{user.fname}} {{user.lname}}!</h3>
+        <h3>Welcome {{profile.fname}} {{profile.lname}}!</h3>
       </header>
       <main>
         <h3>{% if user.admin == True %}
           You are an admin
           {% endif %}
         </h3>
-        <h5>First Name: {{user.fname}}</h5>
-        <h5>Last Name: {{user.lname}}</h5>
         <h5>Email: {{user.email}}</h5>
+        <h5>First Name: {{profile.fname}}</h5>
+        <h5>Last Name: {{profile.lname}}</h5>
 
       </main>
 

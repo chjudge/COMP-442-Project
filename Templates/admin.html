@@ -20,8 +20,8 @@
     <thead>
       <tr>
         <th>User ID</th>
-        <th>First Name</th>
-        <th>Last Name</th>
+        <!-- <th>First Name</th>
+        <th>Last Name</th> -->
         <th>Email Address</th>
       </tr>
     </thead>
@@ -29,8 +29,8 @@
       {% for user in users %}
       <tr>
         <td>{{ user.id }}</td>
-        <td>{{ user.fname }}</td>
-        <td>{{ user.lname }}</td>
+        <!-- <td>{{ user.fname }}</td>
+        <td>{{ user.lname }}</td> -->
         <td>{{ user.email }}</td>
         <td>{% if user.admin != False %}
           Admin

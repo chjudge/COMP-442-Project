@@ -42,10 +42,10 @@ def user_loader(id):
 
 
 class User(UserMixin, db.Model):
+    __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.Unicode, nullable=False)
-    fname = db.Column(db.Unicode, nullable=False)
-    lname = db.Column(db.Unicode, nullable=False)
+    profile = db.relationship('UserProfile', backref='user')
     admin = db.Column(db.Boolean, nullable=False, default=False)
     password_hash = db.Column(db.LargeBinary)  # hash is a binary attribute
 
@@ -62,6 +62,13 @@ class User(UserMixin, db.Model):
     def verify_password(self, pwd):
         return pwd_hasher.check(pwd, self.password_hash)
 
+class UserProfile(db.Model):
+    __tablename__ = 'user_profiles'
+    profile_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    fname = db.Column(db.Unicode, nullable=False)
+    lname = db.Column(db.Unicode, nullable=False)
+    bio = db.Column(db.Unicode, nullable=True)
 
 db.create_all()  # this is only needed if the database doesn't already exist
 
@@ -88,8 +95,12 @@ def post_register():
 
         if user is None:
             print('creating user')
-            user = User(email=r_form.email.data, password=r_form.password.data, fname=r_form.fname.data, lname=r_form.lname.data)
+            user = User(email=r_form.email.data, password=r_form.password.data)
             db.session.add(user)
+            db.session.commit()
+
+            user_profile = UserProfile(user_id=User.query.filter_by(email=r_form.email.data).first().id, fname=r_form.fname.data, lname=r_form.lname.data)
+            db.session.add(user_profile)
             db.session.commit()
             return redirect(url_for('get_login'))
         else: # flash error if account exists
@@ -146,7 +157,8 @@ def get_logout():
 @app.get('/profile/')
 @login_required
 def get_profile():
-    return render_template('profile.html', user=current_user)
+    user_profile = UserProfile.query.filter_by(user_id=current_user.get_id()).first()
+    return render_template('profile.html', user=current_user, profile=user_profile)
 
 @app.get('/admin')
 @login_required
@@ -154,6 +166,7 @@ def get_admin_page():
     print(current_user.get_id())
     if User.query.filter_by(id=current_user.get_id()).first().admin:
         users = User.query.all()
-        return render_template('admin.html', user=current_user, users=users)
+        profiles = UserProfile.query.all()
+        return render_template('admin.html', user=current_user, users=users, profiles=profiles)
     else:
         return redirect(url_for('index'))
