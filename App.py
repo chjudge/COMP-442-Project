@@ -45,7 +45,7 @@ class User(UserMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.Unicode, nullable=False)
-    profile = db.relationship('UserProfile', backref='user')
+    profile = db.relationship('UserProfile', backref='user', lazy=False)
     admin = db.Column(db.Boolean, nullable=False, default=False)
     password_hash = db.Column(db.LargeBinary)  # hash is a binary attribute
 
@@ -65,10 +65,14 @@ class User(UserMixin, db.Model):
 class UserProfile(db.Model):
     __tablename__ = 'user_profiles'
     profile_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     fname = db.Column(db.Unicode, nullable=False)
     lname = db.Column(db.Unicode, nullable=False)
     bio = db.Column(db.Unicode, nullable=True)
+    def __str__(self):
+        return f"UserProfile(profile_id={self.profile_id}, user_id={self.user_id}, fname={self.fname}, lname={self.lname})"
+    def __repr__(self):
+        return f"UserProfile(profile_id={self.profile_id}, user_id={self.user_id}, fname={self.fname}, lname={self.lname})"
 
 db.create_all()  # this is only needed if the database doesn't already exist
 
@@ -164,19 +168,15 @@ def get_profile():
 @login_required
 def post_profile():
     bio = request.form.get('bio')
-    print(f'bio update: "{bio}"')
-
-
-
-    user_profile = UserProfile.query.filter_by(user_id=current_user.get_id()).first()
-    user_profile.bio = bio
-    db.session.commit()
+    if bio != None:
+        user_profile = UserProfile.query.filter_by(user_id=current_user.get_id()).first()
+        user_profile.bio = bio
+        db.session.commit()
     return redirect(url_for('get_profile'))
 
 @app.get('/admin')
 @login_required
 def get_admin_page():
-    print(current_user.get_id())
     if User.query.filter_by(id=current_user.get_id()).first().admin:
         users = User.query.all()
         profiles = UserProfile.query.all()
