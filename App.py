@@ -168,18 +168,33 @@ def get_profile():
 @login_required
 def post_profile():
     bio = request.form.get('bio')
-    if bio != None:
+    if bio is not None:
         user_profile = UserProfile.query.filter_by(user_id=current_user.get_id()).first()
         user_profile.bio = bio
         db.session.commit()
     return redirect(url_for('get_profile'))
 
-@app.get('/admin')
+@app.get('/admin/')
 @login_required
 def get_admin_page():
     if User.query.filter_by(id=current_user.get_id()).first().admin:
         users = User.query.all()
         profiles = UserProfile.query.all()
         return render_template('admin.html', user=current_user, users=users, profiles=profiles)
+    else:
+        return redirect(url_for('index'))
+
+@app.post('/admin/')
+@login_required
+def post_admin_page():
+    if User.query.filter_by(id=current_user.get_id()).first().admin:
+        user_id = request.form.get('remove_user')
+        if user_id is not None:
+            user = User.query.filter_by(id=user_id).first()
+            if user is not None:
+                db.session.delete(UserProfile.query.filter_by(user_id=user_id).first())
+                db.session.delete(user)
+                db.session.commit()
+        return redirect(url_for('get_admin_page'))
     else:
         return redirect(url_for('index'))

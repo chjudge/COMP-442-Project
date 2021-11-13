@@ -24,6 +24,7 @@
         <th>Last Name</th>
         <th>Email Address</th>
         <th>Admin Status</th>
+        <th>Remove User</th>
       </tr>
     </thead>
     <tbody>
@@ -37,6 +38,11 @@
           Admin
           {% endif %}
         </td>
+        <td>
+          <form action="#" method="post">
+            <button value={{user.id}} name="remove_user" type="submit" class="btn btn-primary">Remove</button>
+        </td>
+        </form>
       </tr>
       {% endfor %}
     </tbody>
