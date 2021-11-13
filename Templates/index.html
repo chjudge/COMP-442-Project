@@ -15,6 +15,7 @@
 
 <body>
   <header>
+    <!-- Show error messages to user -->
     <div class="container">
       {% for message in get_flashed_messages() %}
       <div class="alert alert-warning d-flex align-items-center alert-dismissible fade show">
@@ -27,6 +28,7 @@
     </div>
   </header>
   <main>
+    <!-- show that user is logged in -->
     {% if user.is_authenticated %}
     <h1>Logged in as {{user.email}}</h1>
     {% if user.admin == True %}
@@ -38,6 +40,7 @@
   </main>
   <footer>
     <div class="container-md">
+      <!-- display login/logout links appropriately -->
       <br>
       {% if user.is_authenticated %}
       <a href="/logout"> Logout </a>

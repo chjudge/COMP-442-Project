@@ -62,6 +62,7 @@ class User(UserMixin, db.Model):
     def verify_password(self, pwd):
         return pwd_hasher.check(pwd, self.password_hash)
 
+#store data for users profile information
 class UserProfile(db.Model):
     __tablename__ = 'user_profiles'
     profile_id = db.Column(db.Integer, primary_key=True)
@@ -74,7 +75,7 @@ class UserProfile(db.Model):
     def __repr__(self):
         return f"UserProfile(profile_id={self.profile_id}, user_id={self.user_id}, fname={self.fname}, lname={self.lname})"
 
-db.create_all()  # this is only needed if the database doesn't already exist
+db.create_all()
 
 # show user registration form
 @app.get('/register/')
@@ -103,6 +104,7 @@ def post_register():
             db.session.add(user)
             db.session.commit()
 
+            # add name to profile
             user_profile = UserProfile(user_id=User.query.filter_by(email=r_form.email.data).first().id, fname=r_form.fname.data, lname=r_form.lname.data)
             db.session.add(user_profile)
             db.session.commit()
@@ -146,11 +148,12 @@ def post_login():
             flash(f"{field}: {error}")
         return redirect(url_for('get_login'))
 
-
+# return default page
 @app.get('/')
 def index():
     return render_template('index.html', user=current_user)
 
+# logout user account
 @app.get('/logout/')
 @login_required
 def get_logout():
@@ -158,15 +161,19 @@ def get_logout():
     flash('You have been logged out')
     return redirect(url_for('index'))
 
+# display user's profile information
 @app.get('/profile/')
 @login_required
 def get_profile():
+    # pass through the profile of the current user
     user_profile = UserProfile.query.filter_by(user_id=current_user.get_id()).first()
     return render_template('profile.html', user=current_user, profile=user_profile)
 
+# facilitate updates to user profile information
 @app.post('/profile/')
 @login_required
 def post_profile():
+    # update bio
     bio = request.form.get('bio')
     if bio is not None:
         user_profile = UserProfile.query.filter_by(user_id=current_user.get_id()).first()
@@ -174,6 +181,7 @@ def post_profile():
         db.session.commit()
     return redirect(url_for('get_profile'))
 
+# show admin only page, view and remove users
 @app.get('/admin/')
 @login_required
 def get_admin_page():
@@ -181,9 +189,11 @@ def get_admin_page():
         users = User.query.all()
         profiles = UserProfile.query.all()
         return render_template('admin.html', user=current_user, users=users, profiles=profiles)
+    # non-admin users can't view the page
     else:
         return redirect(url_for('index'))
 
+# update database from admin page
 @app.post('/admin/')
 @login_required
 def post_admin_page():
@@ -191,6 +201,7 @@ def post_admin_page():
         user_id = request.form.get('remove_user')
         if user_id is not None:
             user = User.query.filter_by(id=user_id).first()
+            # remove users
             if user is not None:
                 db.session.delete(UserProfile.query.filter_by(user_id=user_id).first())
                 db.session.delete(user)
