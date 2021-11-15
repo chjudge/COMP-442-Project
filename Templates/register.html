@@ -35,25 +35,25 @@
       {{form.hidden_tag()}}
       <div class="form-group">
         <div class="mb-3">
-          {{ form.email.label(class_='form-label') }}
-          <input type="email" class="form-control" name="email" id="email" required="required" aria-describedby="emailHelpId" placeholder="Email">
+          {{ form.email.label(class='form-label') }}
+          {{ form.email(class='form-control') }}
+          </div>
+        <div class="mb-3">
+          {{ form.fname.label(class='form-label') }}
+          {{ form.fname(class='form-control') }}
         </div>
         <div class="mb-3">
-          {{ form.fname.label(class_='form-label') }}
-          <input type="text" class="form-control" name="fname" id="fname" required="required" aria-describedby="fnameHelpId" placeholder="First name">
+          {{ form.lname.label(class='form-label') }}
+          {{ form.lname(class='form-control') }}
         </div>
         <div class="mb-3">
-          {{ form.lname.label(class_='form-label') }}
-          <input type="text" class="form-control" name="lname" id="lname" required="required" aria-describedby="lnameHelpId" placeholder="Last name">
+          {{ form.password.label(class='form-label') }}
+          {{ form.password(class='form-control', minlength='8') }}
         </div>
         <div class="mb-3">
-          {{ form.password.label(class_='form-label') }}
-          <input type="password" class="form-control" name="password" id="password" required="required" aria-describedby="passwordHelpId" placeholder="Password">
-        </div>
-        <div class="mb-3">
-          {{ form.confirm_password.label(class_='form-label') }}
-          <input type="password" class="form-control" name="confirm_password" id="confirm_password" required="required" aria-describedby="confirm_passwordHelpId" placeholder="Confirm password">
-        </div>
+          {{ form.confirm_password.label(class='form-label') }}
+          {{ form.confirm_password(class='form-control', minlength='8') }}
+          </div>
       </div>
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>

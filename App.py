@@ -40,7 +40,6 @@ app.login_manager.login_view = 'get_login'
 def user_loader(id):
     return User.query.get(int(id))
 
-
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -70,6 +69,8 @@ class UserProfile(db.Model):
     fname = db.Column(db.Unicode, nullable=False)
     lname = db.Column(db.Unicode, nullable=False)
     bio = db.Column(db.Unicode, nullable=True)
+    gender = db.Column(db.Enum('M', 'F'), nullable=True)
+
     def __str__(self):
         return f"UserProfile(profile_id={self.profile_id}, user_id={self.user_id}, fname={self.fname}, lname={self.lname})"
     def __repr__(self):

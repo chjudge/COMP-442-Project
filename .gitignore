@@ -3,3 +3,4 @@ checkpwd.py
 mkadmin.py
 *.sqlite3
 *.sqlite3-journal
+ideas.txt

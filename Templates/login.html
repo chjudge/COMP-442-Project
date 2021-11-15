@@ -35,14 +35,12 @@
       {{form.hidden_tag()}}
       <div class="form-group">
         <div class="mb-3">
-          {{ form.email.label(class_='form-label') }}
-          <input type="email" class="form-control" name="email" id="email" required="required" aria-describedby="emailHelpId"
-            placeholder="Email">
+          {{ form.email.label(class='form-label') }}
+          {{ form.email(class='form-control') }}
         </div>
         <div class="mb-3">
-          {{ form.password.label(class_='form-label') }}
-          <input type="password" class="form-control" name="password" id="password" required="required" aria-describedby="passwordHelpId"
-            placeholder="Password">
+          {{ form.password.label(class='form-label') }}
+          {{ form.password(class='form-control') }}
         </div>
       </div>
       <button type="submit" class="btn btn-primary">Submit</button>
