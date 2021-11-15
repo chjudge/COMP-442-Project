@@ -198,14 +198,22 @@ def get_admin_page():
 @login_required
 def post_admin_page():
     if User.query.filter_by(id=current_user.get_id()).first().admin:
-        user_id = request.form.get('remove_user')
-        if user_id is not None:
+        if request.form.get('remove_user') is not None:
+            user_id = request.form.get('remove_user')
             user = User.query.filter_by(id=user_id).first()
             # remove users
             if user is not None:
                 db.session.delete(UserProfile.query.filter_by(user_id=user_id).first())
                 db.session.delete(user)
                 db.session.commit()
+        elif request.form.get('view_profile') is not None:
+            user_id = request.form.get('view_profile')
+            # get user requested by admin page
+            user = User.query.filter_by(id=user_id).first()
+            user_profile = UserProfile.query.filter_by(user_id=user.get_id()).first()
+            # go to user profile
+            return render_template('profile.html', user=user, profile=user_profile)
+
         return redirect(url_for('get_admin_page'))
     else:
         return redirect(url_for('index'))

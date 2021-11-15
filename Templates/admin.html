@@ -33,7 +33,11 @@
         <td>{{ user.id }}</td>
         <td>{{ profiles[user.id-1].fname }}</td>
         <td>{{ profiles[user.id-1].lname }}</td>
-        <td>{{ user.email }}</td>
+        <td>
+          <form action="#" method="post">
+            <button value={{user.id}} name="view_profile" type="submit" title="View profile" class="btn btn-link">{{ user.email }}</button>
+          </form>
+        </td>
         <td>{% if user.admin != False %}
           Admin
           {% endif %}
