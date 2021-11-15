@@ -1,4 +1,4 @@
-from forms import RegisterForm, LoginForm
+from forms import ProfileForm, RegisterForm, LoginForm
 from hasher import Hasher
 import os, sys
 from flask import Flask, render_template, url_for, redirect, request, session, flash
@@ -64,17 +64,16 @@ class User(UserMixin, db.Model):
 #store data for users profile information
 class UserProfile(db.Model):
     __tablename__ = 'user_profiles'
-    profile_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    fname = db.Column(db.Unicode, nullable=False)
-    lname = db.Column(db.Unicode, nullable=False)
+    id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True, nullable=False)
+    fname = db.Column(db.Unicode, nullable=True)
+    lname = db.Column(db.Unicode, nullable=True)
+    gender = db.Column(db.Enum('Male', 'Female'), nullable=True)
     bio = db.Column(db.Unicode, nullable=True)
-    gender = db.Column(db.Enum('M', 'F'), nullable=True)
 
     def __str__(self):
-        return f"UserProfile(profile_id={self.profile_id}, user_id={self.user_id}, fname={self.fname}, lname={self.lname})"
+        return f"UserProfile(id={self.id}, fname={self.fname}, lname={self.lname})"
     def __repr__(self):
-        return f"UserProfile(profile_id={self.profile_id}, user_id={self.user_id}, fname={self.fname}, lname={self.lname})"
+        return f"UserProfile(id={self.id}, fname={self.fname}, lname={self.lname})"
 
 db.create_all()
 
@@ -106,7 +105,7 @@ def post_register():
             db.session.commit()
 
             # add name to profile
-            user_profile = UserProfile(user_id=User.query.filter_by(email=r_form.email.data).first().id, fname=r_form.fname.data, lname=r_form.lname.data)
+            user_profile = UserProfile(id=User.query.filter_by(email=r_form.email.data).first().id)
             db.session.add(user_profile)
             db.session.commit()
             return redirect(url_for('get_login'))
@@ -166,20 +165,32 @@ def get_logout():
 @app.get('/profile/')
 @login_required
 def get_profile():
+    p_form = ProfileForm()
     # pass through the profile of the current user
-    user_profile = UserProfile.query.filter_by(user_id=current_user.get_id()).first()
-    return render_template('profile.html', user=current_user, profile=user_profile)
+    user_profile = UserProfile.query.filter_by(id=current_user.get_id()).first()
+    return render_template('profile.html', user=current_user, profile=user_profile, form=p_form)
 
 # facilitate updates to user profile information
 @app.post('/profile/')
 @login_required
 def post_profile():
+    p_form = ProfileForm()
     # update bio
-    bio = request.form.get('bio')
-    if bio is not None:
-        user_profile = UserProfile.query.filter_by(user_id=current_user.get_id()).first()
-        user_profile.bio = bio
+    if p_form.validate():
+        user_profile = UserProfile.query.filter_by(id=current_user.get_id()).first()
+        user_profile.fname = p_form.fname.data
+        user_profile.lname = p_form.lname.data
+        user_profile.gender = p_form.gender.data
+        user_profile.bio = p_form.bio.data
         db.session.commit()
+    else:
+        print('failure')
+        print(p_form.fname.data)
+        print(p_form.lname.data)
+        print(p_form.gender.data)
+        print(p_form.bio.data)
+        for field, error in p_form.errors.items():
+            print(f"{field}: {error}")
     return redirect(url_for('get_profile'))
 
 # show admin only page, view and remove users
@@ -204,7 +215,7 @@ def post_admin_page():
             user = User.query.filter_by(id=user_id).first()
             # remove users
             if user is not None:
-                db.session.delete(UserProfile.query.filter_by(user_id=user_id).first())
+                db.session.delete(UserProfile.query.filter_by(id=user_id).first())
                 db.session.delete(user)
                 db.session.commit()
         elif request.form.get('view_profile') is not None:
