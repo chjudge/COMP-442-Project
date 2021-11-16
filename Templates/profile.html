@@ -15,33 +15,49 @@
 
 <body>
   <header>
+    {% if profile.fname != None and profile.lname != None %}
     <h3>Welcome {{profile.fname}} {{profile.lname}}!</h3>
+    {% else %}
+    <h3>Welcome!</h3>
+    {% endif %}
   </header>
   <main>
     <h3>{% if user.admin == True %}
       You are an admin
       {% endif %}
     </h3>
-    <div class="list-group container">
-      <h5>Email: {{user.email}}</h5>
-      <h5>First Name: {{profile.fname}}</h5>
-      <h5>Last Name: {{profile.lname}}</h5>
-      <!-- check if bio is null or empty -->
-      {% if profile.bio != None and profile.bio %}
-      <h5>Bio: {{profile.bio}}</h5>
-      {% else %}
-      <!-- allow user to create bio -->
-      <form class="d-flex" method="post" action="#">
-        <div class="col">
-          <div class="mb-3">
-            <label for="bio" class="form-label">Update Bio</label>
-            <textarea class="form-control" name="bio" id="bio" rows="3"></textarea>
-            <button type="submit" class="btn btn-primary">Update</button>
-          </div>
-        </div>
+    <div class="container">
+      <form action="" method="post">
+        {{form.hidden_tag()}}
+        <h5>Email: {{user.email}}</h5>
+        {% if profile.fname != None %}
+        <h5>First Name: {{profile.fname}}</h5>
+        {% else %}
+        {{ form.fname(class='form-control', placeholder='First name') }}
+        {% endif %}
+
+        {% if profile.lname != None %}
+        <h5>Last Name: {{profile.lname}}</h5>
+        {% else %}
+        {{ form.lname(class='form-control', placeholder='Last name') }}
+        {% endif %}
+
+        {% if profile.gender != None %}
+        <h5>Gender: {{profile.gender}}</h5>
+        {% else %}
+        {{ form.gender.label }}
+        {{ form.gender(class='form-control') }}
+        {% endif %}
+        
+        {% if profile.bio != None and profile.bio %}
+        <h5>Bio: {{profile.bio}}</h5>
+        {% else %}
+        {{ form.bio(class='form-control', placeholder='Create your bio') }}
+        {% endif %}
+
+        {{ form.submit }}
       </form>
-      {% endif %}
-      </div>
+    </div>
 
   </main>
 
