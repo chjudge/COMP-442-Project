@@ -1,6 +1,7 @@
 from forms import ProfileForm, RegisterForm, LoginForm
 from hasher import Hasher
-import os, sys
+import os
+import sys
 from flask import Flask, render_template, url_for, redirect, request, session, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, LoginManager, login_required
@@ -9,7 +10,6 @@ from flask_login import login_user, logout_user, current_user
 # Make sure this directory is in your Python path for imports
 scriptdir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(scriptdir)
-
 
 dbfile = os.path.join(scriptdir, "users.sqlite3")
 pepfile = os.path.join(scriptdir, "pepper.bin")
@@ -34,7 +34,6 @@ db = SQLAlchemy(app)
 # Prepare and connect the LoginManager to this app
 app.login_manager = LoginManager()
 app.login_manager.login_view = 'get_login'
-
 
 @app.login_manager.user_loader
 def user_loader(id):
@@ -61,7 +60,7 @@ class User(UserMixin, db.Model):
     def verify_password(self, pwd):
         return pwd_hasher.check(pwd, self.password_hash)
 
-#store data for users profile information
+# store data for users profile information
 class UserProfile(db.Model):
     __tablename__ = 'user_profiles'
     id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True, nullable=False)
@@ -109,7 +108,7 @@ def post_register():
             db.session.add(user_profile)
             db.session.commit()
             return redirect(url_for('get_login'))
-        else: # flash error if account exists
+        else:  # flash error if account exists
             print('user exists')
             flash('An account with that email address already exists')
             return redirect(url_for('get_register'))
@@ -138,7 +137,7 @@ def post_login():
             if next is None or not next.startswith('/'):
                 next = url_for('index')
             return redirect(next)
-        else: # flash error if account does not exist
+        else:  # flash error if account does not exist
             print('Invalid email or password')
             flash('Invalid email or password')
             return redirect(url_for('get_login'))
@@ -147,11 +146,6 @@ def post_login():
             print(f"{field}: {error}")
             flash(f"{field}: {error}")
         return redirect(url_for('get_login'))
-
-# return default page
-@app.get('/')
-def index():
-    return render_template('index.html', user=current_user)
 
 # logout user account
 @app.get('/logout/')
@@ -229,3 +223,13 @@ def post_admin_page():
         return redirect(url_for('get_admin_page'))
     else:
         return redirect(url_for('index'))
+
+        # return default page
+
+@app.get('/')
+def index():
+    return render_template("homepage.html") # Replaced index.html, user=current_user
+
+@app.get("/about/")
+def get_about_page():
+    pass
