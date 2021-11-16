@@ -222,7 +222,7 @@ def post_admin_page():
             user_id = request.form.get('view_profile')
             # get user requested by admin page
             user = User.query.filter_by(id=user_id).first()
-            user_profile = UserProfile.query.filter_by(user_id=user.get_id()).first()
+            user_profile = UserProfile.query.filter_by(id=user.get_id()).first()
             # go to user profile
             return render_template('profile.html', user=user, profile=user_profile)
 

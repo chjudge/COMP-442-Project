@@ -22,11 +22,14 @@
     {% endif %}
   </header>
   <main>
-    <h3>{% if user.admin == True %}
+    <h3>
+      {% if user.admin == True %}
       You are an admin
       {% endif %}
     </h3>
+
     <div class="container">
+      {% if form %}
       <form action="" method="post">
         {{form.hidden_tag()}}
         <h5>Email: {{user.email}}</h5>
@@ -48,7 +51,7 @@
         {{ form.gender.label }}
         {{ form.gender(class='form-control') }}
         {% endif %}
-        
+
         {% if profile.bio != None and profile.bio %}
         <h5>Bio: {{profile.bio}}</h5>
         {% else %}
@@ -57,6 +60,14 @@
 
         {{ form.submit }}
       </form>
+      {% else %}
+      <h5>Email: {{user.email}}</h5>
+      <h5>First Name: {{profile.fname}}</h5>
+      <h5>Last Name: {{profile.lname}}</h5>
+      <h5>Gender: {{profile.gender}}</h5>
+      <h5>Bio: {{profile.bio}}</h5>
+      {% endif %}
+
     </div>
 
   </main>
