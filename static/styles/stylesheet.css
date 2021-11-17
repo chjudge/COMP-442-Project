@@ -1,3 +1,14 @@
 body {
     margin: auto;
 }
+
+.col-lg-2 {
+    margin: 5px;
+    border: black thick;
+    border-radius: 30px;
+}
+
+.row {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
