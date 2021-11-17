@@ -27,7 +27,7 @@
   <header>
     <nav class="navbar navbar-expand-lg navbar-light">
       <div class="container">
-        <a class="navbar-brand" href="#"><img src="/static/images/logo.png" alt="Logo" class="img-fluid" /></a>
+        <a class="navbar-brand" href="{{ url_for('index') }}"><img src="/static/images/logo.png" alt="Logo" class="img-fluid" /></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
           aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -41,10 +41,10 @@
               <a class="nav-link active" href="{{ url_for('get_profile') }}"> Profile </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" href="{{ url_for('get_about_page') }}"> About Us </a>
+              <a class="nav-link disabled" href="{{ url_for('get_about_page') }}"> About Us </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Contact Us</a>
+              <a class="nav-link disabled" href="#">Contact Us</a>
             </li>
           </ul>
           {% if user.is_authenticated %}
@@ -58,7 +58,9 @@
     </nav>
   </header>
   <main>
-
+    <div id="video">
+      <iframe width=640 height=360 src="https://www.youtube.com/embed/ufTaAwUymkw"></iframe>
+    </div>
   </main>
 </body>
 
