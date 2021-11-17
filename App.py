@@ -139,7 +139,7 @@ def post_login():
             # send user back to page they are trying to access
             next = request.args.get('next')
             if next is None or not next.startswith('/'):
-                next = url_for('index')
+                next = url_for('get_homepage')
             return redirect(next)
         else:  # flash error if account does not exist
             print('Invalid email or password')
