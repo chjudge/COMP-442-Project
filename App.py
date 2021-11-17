@@ -1,8 +1,7 @@
 from forms import ProfileForm, RegisterForm, LoginForm
 from hasher import Hasher
-import os
-import sys
-from flask import Flask, render_template, url_for, redirect, request, session, flash
+import os, sys, datetime
+from flask import Flask, render_template, url_for, redirect, request, session, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, LoginManager, login_required
 from flask_login import login_user, logout_user, current_user
@@ -73,7 +72,10 @@ class UserProfile(db.Model):
         return f"UserProfile(id={self.id}, fname={self.fname}, lname={self.lname})"
     def __repr__(self):
         return f"UserProfile(id={self.id}, fname={self.fname}, lname={self.lname})"
+    def serialize(self):
+        return {"fname": self.fname, "lname": self.lname, "gender": self.gender, "bio": self.bio}
 
+# db.drop_all() # (K) Added this to fix querying issues. Use it as needed
 db.create_all()
 
 # show user registration form
@@ -228,8 +230,16 @@ def post_admin_page():
 
 @app.get('/')
 def index():
-    return render_template("homepage.html") # Replaced index.html, user=current_user
+    return render_template("homepage.html", user = current_user)
 
 @app.get("/about/")
 def get_about_page():
     pass
+
+@app.get("/api/v1/profiles/")
+def get_profiles():
+    profiles = UserProfile.query.all()
+    return jsonify({
+        "requested": datetime.datetime.now(),
+        "profiles": [profile.serialize() for profile in profiles]
+    })

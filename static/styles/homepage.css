@@ -1,0 +1,19 @@
+body {
+    margin: auto;
+}
+
+.col-lg-2 {
+    /* margin: 1px; */
+    border: black thin solid;
+    border-radius: 15px;
+}
+
+.row {
+    margin-top: 10px;
+    margin-bottom: 35px;
+}
+
+.profPad {
+    margin: 5px;
+    padding: 5px;
+}
