@@ -1,5 +1,14 @@
 body {
     margin: auto;
+    background-color: rgb(255, 255, 235);
+}
+
+h3 {
+    padding: 1em;
+    padding-bottom: 1em;
+    margin: auto;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    text-align: center;
 }
 
 .col-lg-2 {
@@ -14,15 +23,21 @@ body {
 }
 
 .form {
-    width: 50%;
-    margin: auto;
+    margin:auto;
+    width: 70%;
+    max-width: 30em;
+    /* margin: auto; */
+    background-color: rgb(255, 255, 255);
+    padding: 2em;
+    padding-top: 1.5em;
+    padding-bottom:1.5em;
+    border:rgb(238, 238, 238) outset;
+    border-radius: 15px;
 }
 
-.login {
-    border: 1 black;
-    margin:auto;
-}
 
 button {
     justify-content: center;
+    background-color: crimson !important;
+    border: crimson !important;
 }
