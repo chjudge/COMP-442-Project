@@ -72,6 +72,8 @@ class UserProfile(db.Model):
         return f"UserProfile(id={self.id}, fname={self.fname}, lname={self.lname})"
     def __repr__(self):
         return f"UserProfile(id={self.id}, fname={self.fname}, lname={self.lname})"
+
+    # (K) I know he did an example on this is class 11/17. Once I get that code, I may change this
     def serialize(self):
         return {"fname": self.fname, "lname": self.lname, "gender": self.gender, "bio": self.bio}
 
@@ -230,6 +232,11 @@ def post_admin_page():
 
 @app.get('/')
 def index():
+    return render_template("welcome.html", user = current_user)
+
+@app.get("/home/")
+@login_required
+def get_homepage():
     return render_template("homepage.html", user = current_user)
 
 @app.get("/about/")

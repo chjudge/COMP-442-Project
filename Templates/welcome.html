@@ -1,11 +1,11 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <title>Profile</title>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title> Welcome </title>
 
   <!-- Bootstrap CSS v5.0.2 -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
@@ -38,6 +38,9 @@
               <a class="nav-link active" href="{{ url_for('get_homepage') }}"> Find Your Connection </a>
             </li>
             <li class="nav-item">
+              <a class="nav-link active" href="{{ url_for('get_profile') }}"> Profile </a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link active" href="{{ url_for('get_about_page') }}"> About Us </a>
             </li>
             <li class="nav-item dropdown">
@@ -60,61 +63,8 @@
       </div>
       </div>
     </nav>
-
-    {% if profile.fname != None and profile.lname != None %}
-    <h3>Welcome {{profile.fname}} {{profile.lname}}!</h3>
-    {% else %}
-    <h3>Welcome!</h3>
-    {% endif %}
   </header>
   <main>
-    <h3>
-      {% if user.admin == True %}
-      You are an admin
-      {% endif %}
-    </h3>
-
-    <div class="container">
-      {% if form %}
-      <form action="" method="post">
-        {{form.hidden_tag()}}
-        <h5>Email: {{user.email}}</h5>
-        {% if profile.fname != None %}
-        <h5>First Name: {{profile.fname}}</h5>
-        {% else %}
-        {{ form.fname(class='form-control', placeholder='First name') }}
-        {% endif %}
-
-        {% if profile.lname != None %}
-        <h5>Last Name: {{profile.lname}}</h5>
-        {% else %}
-        {{ form.lname(class='form-control', placeholder='Last name') }}
-        {% endif %}
-
-        {% if profile.gender != None %}
-        <h5>Gender: {{profile.gender}}</h5>
-        {% else %}
-        {{ form.gender.label }}
-        {{ form.gender(class='form-control') }}
-        {% endif %}
-
-        {% if profile.bio != None and profile.bio %}
-        <h5>Bio: {{profile.bio}}</h5>
-        {% else %}
-        {{ form.bio(class='form-control', placeholder='Create your bio') }}
-        {% endif %}
-
-        {{ form.submit }}
-      </form>
-      {% else %}
-      <h5>Email: {{user.email}}</h5>
-      <h5>First Name: {{profile.fname}}</h5>
-      <h5>Last Name: {{profile.lname}}</h5>
-      <h5>Gender: {{profile.gender}}</h5>
-      <h5>Bio: {{profile.bio}}</h5>
-      {% endif %}
-
-    </div>
 
   </main>
 </body>
