@@ -3,6 +3,10 @@ window.addEventListener("DOMContentLoaded", async function () {
     loadProfiles();
 });
 
+/**
+ * Fetches a list of profiles and adds them to the page with addProfiles
+ * @see {@link addProfiles}
+ */
 async function loadProfiles() {
     const profilesURL = "/api/v1/profiles/";
 
@@ -14,21 +18,34 @@ async function loadProfiles() {
         })
 }
 
+/**
+ * Inserts profile data into a Bootstrap grid 
+ * @param {RaceAPIResouce} profiles 
+ */
 async function addProfiles(profiles) {
+    // Get existing div and add a new div "container". Div "row" is added to that.
     const profilesDiv = document.getElementById("all-profiles");
     const container = document.createElement("div");
     container.classList.add("container");
     profilesDiv.appendChild(container);
-    const row = document.createElement("div");
+    var row = document.createElement("div");
     row.classList.add("row");
-    container.appendChild(row);
+    // container.appendChild(row);
 
+    // Will be used to track when to create a new row. Can be modified
     var count = 0;
 
     for (const profile of profiles.profiles) {
-        if (count !== 0 || count % 6 !== 0) {
+        /* 
+        * If the count is not 0 or is not divisible by 6, add a new profile to the
+        * existing row. Otherwise refresh the memory location and value of row
+        * and keep adding profiles.
+        */
+        if (count !== 0 && count % 6 !== 0) {
             const prof = document.createElement("div");
             prof.classList.add("col-lg-2");
+
+            // Create an inner div for CSS styling
             const profPad = document.createElement("div");
             profPad.classList.add("profPad");
             profPad.innerText = profile.fname + " " + profile.lname + "\n"
@@ -36,19 +53,29 @@ async function addProfiles(profiles) {
 
             row.appendChild(prof);
             prof.appendChild(profPad);
+
         } else {
+            // New row
+            row = document.createElement("div");
+            row.classList.add("row");
+            container.appendChild(row);
+
             const prof = document.createElement("div");
             prof.classList.add("col-lg-2");
+
+            // Create an inner div for CSS styling
             const profPad = document.createElement("div");
             profPad.classList.add("profPad");
             profPad.innerText = profile.fname + " " + profile.lname + "\n"
                 + profile.gender + "\n" + profile.bio;
-                
+            
             row.appendChild(prof);
             prof.appendChild(profPad);
         }
 
+        // Increment and log count
         count++;
+        console.log(count);
     }
 }
 
