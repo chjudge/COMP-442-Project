@@ -57,13 +57,17 @@
       </div>
     </nav>
 
+  </header>
+  <div class="notheader ">
+  <main>
+
+
+
     {% if profile.fname != None and profile.lname != None %}
     <h3>Welcome {{profile.fname}} {{profile.lname}}!</h3>
     {% else %}
     <h3>Welcome!</h3>
     {% endif %}
-  </header>
-  <main>
     <h3>
       {% if user.admin == True %}
       You are an admin
@@ -117,6 +121,8 @@
     <a id="back" href="/"> Back to Homepage </a>
     {% endif %}
   </footer>
+
+</div>
 
 </body>
 
