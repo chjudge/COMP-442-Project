@@ -12,3 +12,17 @@ body {
     margin-top: 10px;
     margin-bottom: 10px;
 }
+
+.form {
+    width: 50%;
+    margin: auto;
+}
+
+.login {
+    border: 1 black;
+    margin:auto;
+}
+
+button {
+    justify-content: center;
+}
