@@ -1,9 +1,16 @@
 body {
     margin: auto;
-    background-color: rgb(255, 255, 235);
+    background-image: url("icthus.png");
+    background-repeat: space;
+    background-color: lightyellow;
 }
 
-h3 {
+#back {
+    color: crimson;
+    margin: 1em;
+}
+
+h1, h3 {
     padding: 1em;
     padding-bottom: 1em;
     margin: auto;
