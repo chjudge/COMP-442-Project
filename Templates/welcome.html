@@ -52,6 +52,10 @@
           {% else %}
           <a class="btn btn-light ms-3" href="{{ url_for('get_login') }}"> Login </a>
           {% endif %}
+
+          {% if not user.is_authenticated %}
+          <a class="btn btn-light ms-3" href="{{ url_for('get_register') }}"> Register </a>
+          {% endif %}
         </div>
       </div>
       </div>
