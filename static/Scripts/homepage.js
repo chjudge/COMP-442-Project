@@ -41,41 +41,55 @@ async function addProfiles(profiles) {
         * existing row. Otherwise refresh the memory location and value of row
         * and keep adding profiles.
         */
-        if (count !== 0 && count % 6 !== 0) {
-            const prof = document.createElement("div");
-            prof.classList.add("col-lg-2");
+        if (profile.fname !== null || profile.lname !== null ||
+            profile.gender !== null || profile.bio !== null) {
+            if (count !== 0 && count % 6 !== 0) {
+                console.log("if");
+                const prof = document.createElement("div");
+                prof.classList.add("col-lg-2");
 
-            // Create an inner div for CSS styling
-            const profPad = document.createElement("div");
-            profPad.classList.add("profPad");
-            profPad.innerText = profile.fname + " " + profile.lname + "\n"
-                + profile.gender + "\n" + profile.bio;
+                // Create an inner div for CSS styling
+                const profPad = document.createElement("div");
+                profPad.classList.add("profPad");
+                profPad.innerText = profile.fname + " " + profile.lname + "\n"
+                    + profile.gender + "\n" + profile.bio;
 
-            row.appendChild(prof);
-            prof.appendChild(profPad);
+                row.appendChild(prof);
+                prof.appendChild(profPad);
+                
+                // Increment and log count
+                count++;
+                console.log(count);
+            } else {
+                console.log("else");
+                // New row
+                row = document.createElement("div");
+                row.classList.add("row");
+                container.appendChild(row);
 
-        } else {
+                const prof = document.createElement("div");
+                prof.classList.add("col-lg-2");
+
+                // Create an inner div for CSS styling
+                const profPad = document.createElement("div");
+                profPad.classList.add("profPad");
+                profPad.innerText = profile.fname + " " + profile.lname + "\n"
+                    + profile.gender + "\n" + profile.bio;
+
+                row.appendChild(prof);
+                prof.appendChild(profPad);
+
+                // Increment and log count
+                count++;
+                console.log(count);
+            }
+        } else if (count % 6 === 0) {
+            console.log("else if");
             // New row
             row = document.createElement("div");
             row.classList.add("row");
             container.appendChild(row);
-
-            const prof = document.createElement("div");
-            prof.classList.add("col-lg-2");
-
-            // Create an inner div for CSS styling
-            const profPad = document.createElement("div");
-            profPad.classList.add("profPad");
-            profPad.innerText = profile.fname + " " + profile.lname + "\n"
-                + profile.gender + "\n" + profile.bio;
-            
-            row.appendChild(prof);
-            prof.appendChild(profPad);
         }
-
-        // Increment and log count
-        count++;
-        console.log(count);
     }
 }
 
