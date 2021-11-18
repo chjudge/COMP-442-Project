@@ -3,20 +3,21 @@
 }
 
 #video {
-    float:right;
+    /* float:right; */
+    text-align: center;
     margin: 2em;
     /* margin-top: 3em; */
 }
 
 #blurb {
-    float: left;
+    /* float: left; */
     margin: 2em;
     /* margin-top:3em; */
     background-color: white;
     border: rgb(238, 238, 238) outset;
     border-radius: 15px;
     padding: .5em;
-    width:39%
+    /* min-width:39% */
 }
 
 #title {
