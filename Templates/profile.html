@@ -102,13 +102,15 @@
         {{ form.gender(class='form-control') }}
         {% endif %}
 
-        {% if profile.bio != None and profile.bio %}
+        {% if profile.bio != None %}
         <h5>Bio: {{profile.bio}}</h5>
         {% else %}
         {{ form.bio(class='form-control', placeholder='Create your bio') }}
         {% endif %}
-
+        {% if profile.fname != None and profile.lname != None and profile.gender != None and profile.bio != None %}
+        {% else %}
         {{ form.submit }}
+        {% endif %}
       </form>
       {% else %}
       <h5>Email: {{user.email}}</h5>

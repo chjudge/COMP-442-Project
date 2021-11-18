@@ -1,6 +1,6 @@
 from forms import ProfileForm, RegisterForm, LoginForm
 from hasher import Hasher
-import os, sys, datetime
+import os, sys, datetime, re
 from flask import Flask, render_template, url_for, redirect, request, session, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, LoginManager, login_required
@@ -122,9 +122,10 @@ def post_register():
             flash('An account with that email address already exists')
             return redirect(url_for('get_register'))
     else:  # flash errors if form is invalid
+        exclude = r'[\'\[\]]'
         for field, error in r_form.errors.items():
-            print(f"{field}: {error}")
-            flash(f"{field}: {error}")
+            print(f"{field}: {str(error)}")
+            flash(f"{re.sub(exclude, '', str(error))}")
         return redirect(url_for('get_register'))
 
 # validate login form
@@ -151,9 +152,10 @@ def post_login():
             flash('Invalid email or password')
             return redirect(url_for('get_login'))
     else:  # flash errors if form is invalid
+        exclude = r'[\'\[\]]'
         for field, error in l_form.errors.items():
-            print(f"{field}: {error}")
-            flash(f"{field}: {error}")
+            print(f"{field}: {str(error)}")
+            flash(f"{re.sub(exclude, '', str(error))}")
         return redirect(url_for('get_login'))
 
 # logout user account

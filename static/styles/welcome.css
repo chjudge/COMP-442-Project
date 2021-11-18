@@ -1,3 +1,19 @@
 .navbar {
     background-color: rgb(255, 255, 255);
 }
+
+#video {
+    float:left;
+    margin: 3em;
+    margin-right: 1em;
+}
+
+#blurb {
+    float: right;
+    margin: 2em;
+    margin-top:3em;
+    background-color: white;
+    border: rgb(238, 238, 238) outset;
+    border-radius: 15px;
+    padding: .5em;
+}

@@ -25,13 +25,16 @@
 
 <body>
   <header>
-    <div class="container">
+    <div class="toast-container d-flex flex-column align-items-center w-100">
       {% for message in get_flashed_messages() %}
-      <div class="alert alert-warning d-flex align-items-center alert-dismissible fade show">
-        <button type="button" class="close" data-bs-dismiss="alert">
-          &times;
-        </button>
-        {{ message }}
+      <div class="toast"role="alert" data-bs-autohide="false" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <strong class="me-auto">Login Error</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+          {{message}}
+        </div>
       </div>
       {% endfor %}
     </div>
@@ -56,6 +59,8 @@
     </form>
     
   </div>
+
+  <script src="/static/scripts/toast.js"></script>
   </main>
 <footer>
   <a id="back" href="/"> Back to Homepage </a>
