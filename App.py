@@ -63,10 +63,10 @@ class User(UserMixin, db.Model):
 class UserProfile(db.Model):
     __tablename__ = 'user_profiles'
     id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True, nullable=False)
-    fname = db.Column(db.Unicode, nullable=True)
-    lname = db.Column(db.Unicode, nullable=True)
-    gender = db.Column(db.Enum('Male', 'Female'), nullable=True)
-    bio = db.Column(db.Unicode, nullable=True)
+    fname = db.Column(db.Unicode, nullable = True)
+    lname = db.Column(db.Unicode, nullable = True)
+    gender = db.Column(db.Enum('Male', 'Female'), nullable = True)
+    bio = db.Column(db.Unicode, nullable = True)
 
     def __str__(self):
         return f"UserProfile(id={self.id}, fname={self.fname}, lname={self.lname})"
@@ -111,7 +111,12 @@ def post_register():
             user_profile = UserProfile(id=User.query.filter_by(email=r_form.email.data).first().id)
             db.session.add(user_profile)
             db.session.commit()
-            return redirect(url_for('get_login'))
+
+            # (K) trying something
+            # user = User.query.filter_by(email=r_form.email.data).first()
+            login_user(user) 
+
+            return redirect(url_for('get_profile'))
         else:  # flash error if account exists
             print('user exists')
             flash('An account with that email address already exists')
@@ -180,6 +185,7 @@ def post_profile():
         user_profile.lname = p_form.lname.data
         user_profile.gender = p_form.gender.data
         user_profile.bio = p_form.bio.data
+
         db.session.commit()
     else:
         print('failure')

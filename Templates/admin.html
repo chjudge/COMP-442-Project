@@ -38,7 +38,8 @@
             <button value={{user.id}} name="view_profile" type="submit" title="View profile" class="btn btn-link">{{ user.email }}</button>
           </form>
         </td>
-        <td>{% if user.admin != False %}
+        <td>
+          {% if user.admin != False %}
           Admin
           {% endif %}
         </td>
