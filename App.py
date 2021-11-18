@@ -218,6 +218,7 @@ def post_admin_page():
                 db.session.delete(UserProfile.query.filter_by(id=user_id).first())
                 db.session.delete(user)
                 db.session.commit()
+                flash(f'User #{user_id} has been removed')
         elif request.form.get('view_profile') is not None:
             user_id = request.form.get('view_profile')
             # get user requested by admin page
@@ -225,7 +226,14 @@ def post_admin_page():
             user_profile = UserProfile.query.filter_by(id=user.get_id()).first()
             # go to user profile
             return render_template('profile.html', user=user, profile=user_profile)
-
+        elif request.form.get('make_admin') is not None:
+            user_id = request.form.get('make_admin')
+            # get user requested by admin page
+            user = User.query.filter_by(id=user_id).first()
+            if user is not None:
+                user.admin = 1
+                db.session.commit()
+                flash(f'User {user_id} has been made an administrator')
         return redirect(url_for('get_admin_page'))
     else:
         return redirect(url_for('index'))

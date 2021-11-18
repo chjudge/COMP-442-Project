@@ -13,6 +13,22 @@
 
 </head>
 
+<header>
+  <div class="toast-container d-flex flex-column align-items-center w-100">
+    {% for message in get_flashed_messages() %}
+    <div class="toast"role="alert" data-bs-autohide="false" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <strong class="me-auto">Admin</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body">
+        {{message}}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</header>
+
 <body>
   <h2>View Users</h2>
 
@@ -38,8 +54,12 @@
             <button value={{user.id}} name="view_profile" type="submit" title="View profile" class="btn btn-link">{{ user.email }}</button>
           </form>
         </td>
-        <td>{% if user.admin != False %}
+        <td>
+          {% if user.admin != False %}
           Admin
+          {% else %}
+          <form action="#" method="post">
+            <button value={{user.id}} name="make_admin" type="submit" class="btn btn-info">Make Admin</button>
           {% endif %}
         </td>
         <!-- remove user in the row -->
@@ -67,6 +87,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
     integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
     crossorigin="anonymous"></script>
+    <script src="/static/scripts/toast.js"></script>
 </body>
 
 </html>
