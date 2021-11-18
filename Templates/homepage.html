@@ -72,24 +72,7 @@
     <!-- Div that homepage.js will latch onto -->
     <div id="all-profiles"></div>
   </main>
-  <footer>
-    <div class="container-md">
-      <!-- display login/logout links appropriately -->
-      <br>
-      {% if user.is_authenticated %}
-      <a class="logio" href="/logout"> Logout </a>
-      &emsp;&emsp;&emsp;&emsp;&emsp;
-      {% else %}
-      <a class="logio" href="/login"> Login </a>
-      &emsp;&emsp;&emsp;&emsp;&emsp;
-      <a id="register" href="/register"> Register </a>
-      &emsp;&emsp;&emsp;&emsp;&emsp;
-      {% endif %}
-      <a id="profile" href="/profile"> Profile </a>
-      <br>
-    </div>
-  </footer>
-
+  
   <script src="/static/scripts/toast.js"></script>
 </body>
 
