@@ -11,13 +11,14 @@
 
 #blurb {
     /* float: left; */
-    margin: 2em;
+    margin: 5em;
     /* margin-top:3em; */
     background-color: white;
     border: rgb(238, 238, 238) outset;
     border-radius: 15px;
     padding: .5em;
     /* min-width:39% */
+    text-align: center;
 }
 
 #title {
