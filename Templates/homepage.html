@@ -10,7 +10,7 @@
   <!-- Bootstrap CSS v5.0.2 -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  
+
   <!-- Bootstrap JavaScript Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
     integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
@@ -41,6 +41,34 @@
       </div>
       {% endfor %}
     </div>
+
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <div class="container">
+        <a class="navbar-brand" href="#"><img src="/static/images/logo.png" alt="Logo" class="img-fluid" /></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+          aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav mx-lg-auto">
+            <li class="nav-item">
+              <a class="nav-link active" href="{{ url_for('get_homepage') }}"> Find Your Connection </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="{{ url_for('get_profile') }}"> Profile </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="{{ url_for('get_about_page') }}"> About Us </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Contact Us</a>
+            </li>
+          </ul>
+          {% if user.is_authenticated %}
+          <a class="btn btn-light ms-3" href="{{ url_for('get_logout') }}"> Logout </a>
+          {% else %}
+          <a class="btn btn-light ms-3" href="{{ url_for('get_login') }}"> Login </a>
+          {% endif %}
   </header>
   <main>
     <!-- show that user is logged in -->
@@ -66,7 +94,7 @@
       {% else %}
       <a class="logio" href="/login"> Login </a>
       &emsp;&emsp;&emsp;&emsp;&emsp;
-      <a id ="register" href="/register"> Register </a>
+      <a id="register" href="/register"> Register </a>
       &emsp;&emsp;&emsp;&emsp;&emsp;
       {% endif %}
       <a id="profile" href="/profile"> Profile </a>
