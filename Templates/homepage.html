@@ -53,6 +53,9 @@
             </li>
           </ul>
           {% if user.is_authenticated %}
+          {% if user.admin == True %}
+          <a class="btn btn-light ms-3" href="{{ url_for('get_admin_page') }}"> Admin Page </a>
+          {% endif %}
           <a class="btn btn-light ms-3" href="{{ url_for('get_logout') }}"> Logout </a>
           {% else %}
           <a class="btn btn-light ms-3" href="{{ url_for('get_login') }}"> Login </a>
@@ -62,9 +65,6 @@
     <!-- show that user is logged in -->
     {% if user.is_authenticated %}
     <h1>Logged in as {{user.email}}</h1>
-    {% if user.admin == True %}
-    <a href="/admin"> Admin Page </a>
-    {% endif %}
     {% else %}
     <h1> Start Mingling! </h1>
     {% endif %}
