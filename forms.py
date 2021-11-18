@@ -16,7 +16,7 @@ class ProfileForm(FlaskForm):
     fname = StringField("First Name: ", validators=[InputRequired()])
     lname = StringField("Last Name: ", validators=[InputRequired()])
     gender = SelectField("Gender: ", choices=["Male", "Female"])
-    bio = TextAreaField("Bio: ")
+    bio = TextAreaField("Bio: ", validators=[InputRequired()])
     submit = SubmitField("Update profile")
 
 class LoginForm(FlaskForm):
