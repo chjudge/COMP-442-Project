@@ -110,7 +110,7 @@
         {% endif %}
         {% if profile.fname != None and profile.lname != None and profile.gender != None and profile.bio != None %}
         {% else %}
-        {{ form.submit }}
+        <a class="btn btn-light ms-3" href="{{ url_for('get_admin_page') }}"> {{ form.submit }} </a>
         {% endif %}
       </form>
       {% else %}
@@ -122,6 +122,8 @@
         <h5>Bio: {{profile.bio}}</h5>
       </div>
       {% endif %}
+      <a class="btn btn-light ms-3" href="{{ url_for('get_profile') }}"> Update Profile </a>
+
     </div>
   </main>
 
