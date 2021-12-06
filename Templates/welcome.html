@@ -28,7 +28,8 @@
   <header>
     <nav class="navbar navbar-expand-lg navbar-light">
       <div class="container">
-        <a class="navbar-brand" href="{{ url_for('index') }}"><img src="/static/images/logo.png" alt="Logo" class="img-fluid" /></a>
+        <a class="navbar-brand" href="{{ url_for('index') }}"><img src="/static/images/logo.png" alt="Logo"
+            class="img-fluid" /></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
           aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -64,7 +65,7 @@
 
     <div class="toast-container d-flex flex-column align-items-center w-100">
       {% for message in get_flashed_messages() %}
-      <div class="toast"role="alert" data-bs-autohide="false" aria-live="assertive" aria-atomic="true">
+      <div class="toast" role="alert" data-bs-autohide="false" aria-live="assertive" aria-atomic="true">
         <div class="toast-header">
           <strong class="me-auto">Logout</strong>
           <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -78,13 +79,13 @@
   </header>
   <main>
     <div id="video">
-      <iframe width=640 height=360 src="https://www.youtube.com/embed/ufTaAwUymkw?autoplay=1&mute=1&loop=1&playlist=ufTaAwUymkw"></iframe>
+      <iframe width=640 height=360
+        src="https://www.youtube.com/embed/ufTaAwUymkw?autoplay=1&mute=1&loop=1&playlist=ufTaAwUymkw"></iframe>
     </div>
     <div id="blurb">
       <h1 id="title">GROVER MINGLE</h1>
       <p>Grover Mingle is a dating site for students at Grove City college looking to get dat ring by spring.</p>
       <p>DISCLAIMER: This video was not produced as part of this project</p>
-      
     </div>
   </main>
 
