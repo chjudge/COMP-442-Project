@@ -28,9 +28,6 @@ async function addProfiles(profiles) {
     const container = document.createElement("div");
     container.classList.add("container");
     profilesDiv.appendChild(container);
-    var row = document.createElement("div");
-    row.classList.add("row");
-    // container.appendChild(row);
 
     // Will be used to track when to create a new row. Can be modified
     var count = 0;
@@ -44,53 +41,83 @@ async function addProfiles(profiles) {
         if (profile.fname !== null || profile.lname !== null ||
             profile.gender !== null || profile.bio !== null) {
             if (count !== 0 && count % 6 !== 0) {
-                console.log("if");
+                console.log("if"); // Debugging
                 const prof = document.createElement("div");
-                prof.classList.add("col-lg-2");
+                prof.classList.add("col");
 
                 // Create an inner div for CSS styling
                 const profPad = document.createElement("div");
                 profPad.classList.add("profPad");
+                profPad.classList.add("p-3");
+                profPad.classList.add("border");
+                profPad.classList.add("rounded");
+                profPad.classList.add("bg-light");
+                // profPad.setAttribute("value", profile.id);
                 profPad.innerText = profile.fname + " " + profile.lname + "\n"
                     + profile.gender + "\n" + profile.bio;
 
                 row.appendChild(prof);
                 prof.appendChild(profPad);
+
+                profPad.addEventListener("click", viewProfile(profile.id));
                 
                 // Increment and log count
                 count++;
                 console.log(count);
             } else {
-                console.log("else");
+                console.log("else"); // Debugging
                 // New row
                 row = document.createElement("div");
                 row.classList.add("row");
+                row.classList.add("row-cols-3");
+                row.classList.add("row-cols-lg-6");
+                row.classList.add("g-2");
+                row.classList.add("g-lg-3");
                 container.appendChild(row);
 
                 const prof = document.createElement("div");
-                prof.classList.add("col-lg-2");
+                prof.classList.add("col");
 
                 // Create an inner div for CSS styling
                 const profPad = document.createElement("div");
                 profPad.classList.add("profPad");
+                profPad.classList.add("p-3");
+                profPad.classList.add("border");
+                profPad.classList.add("rounded");
+                profPad.classList.add("bg-light");
+                // profPad.setAttribute("value", profile.id);
                 profPad.innerText = profile.fname + " " + profile.lname + "\n"
                     + profile.gender + "\n" + profile.bio;
 
                 row.appendChild(prof);
                 prof.appendChild(profPad);
 
+                profPad.addEventListener("click", viewProfile(profile.id));
+
+                // const link = document.createElement("a");
+                // link.href = ''
+
                 // Increment and log count
                 count++;
-                console.log(count);
+                console.log(count); // Debugging
             }
         } else if (count % 6 === 0) {
             console.log("else if");
             // New row
             row = document.createElement("div");
             row.classList.add("row");
+            row.classList.add("row-cols-3");
+            row.classList.add("row-cols-lg-6");
+            row.classList.add("g-2");
+            row.classList.add("g-lg-3");
             container.appendChild(row);
         }
     }
+}
+
+function viewProfile(id) {
+    const profileView = `/api/v1/profiles/?id=${id}/`
+    pass
 }
 
 /**
