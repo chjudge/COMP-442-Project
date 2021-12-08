@@ -80,8 +80,8 @@
     </div>
 
     <div class="container">
-      {% if form %}
       <form action="" class="form" method="post">
+      {% if (update == False) %}
         {{form.hidden_tag()}}
         <h5>Email: {{user.email}}</h5>
         {% if profile.fname != None %}
@@ -107,11 +107,20 @@
         <h5>Bio: {{profile.bio}}</h5>
         {% else %}
         {{ form.bio(class='form-control', placeholder='Create your bio') }}
-        {% endif %}
-        {% if profile.fname != None and profile.lname != None and profile.gender != None and profile.bio != None %}
-        {% else %}
-        <a class="btn btn-light ms-3" href="{{ url_for('get_admin_page') }}"> {{ form.submit }} </a>
-        {% endif %}
+        {%endif%}
+
+        <a class="btn btn-dark ms-3" href="{{ url_for('update_profile') }}"> Update Profile </a>
+
+      {%elif (update == True) %}
+
+          {{ form.hidden_tag()}}
+          {{ form.fname(class='form-control', placeholder='First name') }}
+          {{ form.lname(class='form-control', placeholder='Last name') }}
+          {{ form.gender.label }}
+          {{ form.gender(class='form-control', placeholder='{{profile.gender}}') }}
+          {{ form.bio(class='form-control', placeholder='') }}
+
+        <a class="btn btn-light ms-3" href="{{ url_for('get_profile') }}"> {{ form.submit }} </a>
       </form>
       {% else %}
       <div class="form">
@@ -122,7 +131,6 @@
         <h5>Bio: {{profile.bio}}</h5>
       </div>
       {% endif %}
-      <a class="btn btn-light ms-3" href="{{ url_for('get_profile') }}"> Update Profile </a>
 
     </div>
   </main>
