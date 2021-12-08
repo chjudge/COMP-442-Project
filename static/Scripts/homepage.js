@@ -59,7 +59,7 @@ async function addProfiles(profiles) {
                 row.appendChild(prof);
                 prof.appendChild(profPad);
 
-                profPad.addEventListener("click", viewProfile(profile.id));
+                profPad.addEventListener("click", function() {viewProfile(profile.id);});
                 
                 // Increment and log count
                 count++;
@@ -92,7 +92,7 @@ async function addProfiles(profiles) {
                 row.appendChild(prof);
                 prof.appendChild(profPad);
 
-                profPad.addEventListener("click", viewProfile(profile.id));
+                profPad.addEventListener("click", function() {viewProfile(profile.id);});
 
                 // const link = document.createElement("a");
                 // link.href = ''
@@ -115,9 +115,34 @@ async function addProfiles(profiles) {
     }
 }
 
-function viewProfile(id) {
-    const profileView = `/api/v1/profiles/?id=${id}/`
-    pass
+async function viewProfile(id) {
+    const profileView = `/api/v1/profiles/${id}` // Make this optional
+    
+    fetch(profileView)
+        .then(validateJSON)
+        .then(data => {
+            const profile = document.getElementById("current-profile");
+
+            const profileContent = document.createElement("div");
+            profileContent.id = "current-profile-content";
+            profileContent.innerText = data.profile.fname;
+
+            console.log(data);
+
+            profile.appendChild(profileContent);
+
+            profile.style.display = "block";
+
+            window.onclick = function(event) {
+                if (event.target.id === "current-profile") {
+                    event.target.style.display = "none";
+                    document.getElementById("current-profile").innerHTML = null;
+                }
+            }
+        })
+        .catch(error => {
+            console.log("Profile Fetch Failed: ", error)
+        })
 }
 
 /**

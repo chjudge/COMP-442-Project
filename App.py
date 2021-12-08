@@ -68,8 +68,8 @@ class UserProfile(db.Model):
     lname = db.Column(db.Unicode, nullable = True)
     gender = db.Column(db.Enum('Male', 'Female'), nullable = True)
     bio = db.Column(db.Unicode, nullable = True)
-    # interests = db.Column(db.Unicode, nullable = True) # TODO: make this into a list
-    # dislikes = db.Column(db.Unicode, nullable = True) # TODO: make this into a list
+    interests = db.Column(db.Unicode, nullable = True) # TODO: make this into a list
+    dislikes = db.Column(db.Unicode, nullable = True) # TODO: make this into a list
 
     def __str__(self):
         return f"UserProfile(id={self.id}, fname={self.fname}, lname={self.lname})"
@@ -319,10 +319,10 @@ def get_profiles():
         "profiles": [profile.serialize() for profile in profiles]
     })
 
-# @app.get("/api/v1/profiles/<int:user_id>")
-# def get_other_profile(user_id): # Rename eventually
-#     profile = UserProfile.query.filter(id = user_id)
-#     return jsonify({
-#         "requested": datetime.datetime.now(),
-#         "profile": profile.profile_to_json()
-#     })
+@app.get("/api/v1/profiles/<int:user_id>")
+def get_other_profile(user_id): # Rename eventually
+    profile = UserProfile.query.get(user_id)
+    return jsonify({
+        "requested": datetime.datetime.now(),
+        "profile": profile.profile_to_json()
+    })
