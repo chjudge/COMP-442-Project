@@ -99,7 +99,6 @@
         {% if profile.gender != None %}
         <h5>Gender: {{profile.gender}}</h5>
         {% else %}
-        {{ form.gender.label }}
         {{ form.gender(class='form-control') }}
         {% endif %}
 
@@ -109,21 +108,26 @@
         {{ form.bio(class='form-control', placeholder='Create your bio') }}
         {%endif%}
 
+        <br>
         <a class="btn btn-dark ms-3" href="{{ url_for('update_profile') }}"> Update Profile </a>
 
       {%elif (update == True) %}
 
           {{ form.hidden_tag()}}
+          {{ form.fname.label }}
           {{ form.fname(class='form-control', placeholder='First name') }}
+          {{ form.lname.label }}
           {{ form.lname(class='form-control', placeholder='Last name') }}
           {{ form.gender.label }}
-          {{ form.gender(class='form-control', placeholder='{{profile.gender}}') }}
-          {{ form.bio(class='form-control', placeholder='') }}
+          {{ form.gender(class='form-control', placeholder='Gender') }}
+          {{ form.bio.label }}
+          {{ form.bio(class='form-control', placeholder='Bio') }}
 
-        <a class="btn btn-light ms-3" href="{{ url_for('get_profile') }}"> {{ form.submit }} </a>
+        <br>
+        <input class='btn btn-dark ms-3' id="submit" name="submit" type="submit" value="Update profile">
       </form>
       {% else %}
-      <div class="form">
+      <div class="form" id="display">
         <h5>Email: {{user.email}}</h5>
         <h5>First Name: {{profile.fname}}</h5>
         <h5>Last Name: {{profile.lname}}</h5>
