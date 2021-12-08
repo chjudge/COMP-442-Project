@@ -68,6 +68,8 @@ class UserProfile(db.Model):
     lname = db.Column(db.Unicode, nullable = True)
     gender = db.Column(db.Enum('Male', 'Female'), nullable = True)
     bio = db.Column(db.Unicode, nullable = True)
+    interests = db.Column(db.Unicode, nullable = True) # TODO: make this into a list
+    dislikes = db.Column(db.Unicode, nullable = True) # TODO: make this into a list
 
     def __str__(self):
         return f"UserProfile(id={self.id}, fname={self.fname}, lname={self.lname})"
@@ -76,7 +78,23 @@ class UserProfile(db.Model):
 
     # (K) I know he did an example on this is class 11/17. Once I get that code, I may change this
     def serialize(self):
-        return {"fname": self.fname, "lname": self.lname, "gender": self.gender, "bio": self.bio}
+        return {
+            "id": self.id,
+            "fname": self.fname,
+            "lname": self.lname,
+            "gender": self.gender,
+            "bio": self.bio
+        }
+    def profile_to_json(self):
+        return {
+            "id": self.id,
+            "fname": self.fname,
+            "lname": self.lname,
+            "gender": self.gender,
+            "bio": self.bio,
+            "interests": self.interests,
+            "dislikes": self.dislikes
+        }
 
 # db.drop_all() # (K) Added this to fix querying issues. Use it as needed
 db.create_all()
@@ -299,4 +317,12 @@ def get_profiles():
     return jsonify({
         "requested": datetime.datetime.now(),
         "profiles": [profile.serialize() for profile in profiles]
+    })
+
+@app.get("/api/v1/profiles/<int:user_id>")
+def get_other_profile(user_id): # Rename eventually
+    profile = UserProfile.query.get(user_id)
+    return jsonify({
+        "requested": datetime.datetime.now(),
+        "profile": profile.profile_to_json()
     })
