@@ -1,0 +1,4 @@
+Melva
+
+1. Make Update Profile Work
+2. Account Settings page (different from profile, enables email change)
