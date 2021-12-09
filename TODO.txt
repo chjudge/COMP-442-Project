@@ -2,3 +2,22 @@ Melva
 
 1. Make Update Profile Work
 2. Account Settings page (different from profile, enables email change)
+
+Things to do for GroverMingle:
+-make sure admin and the current user are not displayed
+on the profile page
+-create a filter by gender (and then others if easy)
+	- i am going to implement by adding a prefences page that
+	can be changed and will be applied to everything automatically
+-implement a chat feature using a database
+	- will say if read or not in database
+	- reply will add a message to the other's db
+-polish profile view by implementing another db table that stores
+tuples of likes a dislikes
+-add profile image support
+	-this must be implemented across the board
+
+Current:
+-fix profile page image view
+-fix error message flashing for age and pfp (done)
+-make it so the create preferences button does not appear upon initial setup

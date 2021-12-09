@@ -66,6 +66,11 @@ class User(UserMixin, db.Model):
     def verify_password(self, pwd):
         return pwd_hasher.check(pwd, self.password_hash)
 
+    # def __str__(self):
+    #     return f"User(id={self.id})"
+    # def __repr__(self):
+    #     return str(self)
+
 # store data for users profile information
 class UserProfile(db.Model):
     __tablename__ = 'user_profiles'
@@ -328,12 +333,14 @@ def post_preferences():
     return redirect(url_for("get_profile"))
 
 @app.get("/profile/preferences/update/")
+@login_required
 def get_preferences_update():
     user_profile = UserPreferences.query.filter_by(id=current_user.get_id()).first()
     form = PreferencesForm(formdata=MultiDict({"ageStart": user_profile.ageStart, "ageEnd": user_profile.ageEnd, "gender": user_profile.gender}))
     return render_template('preferences.html', user=current_user, profile=user_profile, form=form, update = True)
 
 @app.post("/profile/preferences/update/")
+@login_required
 def post_update_preferences():
     form = PreferencesForm()
     if form.validate():
@@ -413,7 +420,22 @@ def get_about_page():
 
 @app.get("/api/v1/profiles/")
 def get_profiles():
-    profiles = UserProfile.query.all()
+    user_preferences = UserPreferences.query.filter_by(id=current_user.get_id()).first() 
+
+    if user_preferences.ageStart and user_preferences.ageEnd and user_preferences.gender:
+        admin = User.query.filter(User.admin == True).all()
+        profiles = UserProfile.query.filter(UserProfile.age <= user_preferences.ageEnd, 
+            UserProfile.age >= user_preferences.ageStart, 
+            UserProfile.gender == user_preferences.gender,
+            UserProfile.id != current_user.get_id()).all()
+        for profile in profiles:
+            for a in admin:
+                if profile.id == a.id:
+                    profiles.remove(profile)
+    else:
+        profiles = UserProfile.query.filter(UserProfile.id != current_user.get_id(), 
+            UserProfile.id != (User.admin == 1)).all()
+        
     return jsonify({
         "requested": datetime.datetime.now(),
         "profiles": [profile.serialize() for profile in profiles]
