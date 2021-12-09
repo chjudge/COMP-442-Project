@@ -216,8 +216,8 @@ def get_profile():
 @login_required
 def update_profile():
     user_profile = UserProfile.query.filter_by(id=current_user.get_id()).first()
-    p_form = ProfileForm(formdata=MultiDict({"fname": user_profile.fname, "lname": user_profile.lname, 
-        "gender": user_profile.gender, "bio": user_profile.bio}))
+    p_form = ProfileForm(formdata=MultiDict({"fname": user_profile.fname, "lname": user_profile.lname, "age": user_profile.age,
+        "gender": user_profile.gender, "bio": user_profile.bio, "picture": user_profile.picture}))
     return render_template('profile.html', user=current_user, profile=user_profile, form=p_form, update = True)
 
 # @app.post('/profile/update/')
