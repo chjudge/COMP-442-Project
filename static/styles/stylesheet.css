@@ -115,3 +115,8 @@ footer{
     width: 60%;
     background-color: white;
 }
+
+.btn-crimson {
+    background-color: crimson;
+    color: white;
+}

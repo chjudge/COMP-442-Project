@@ -64,6 +64,19 @@
       </div>
       </div>
     </nav>
+    <div class="toast-container d-flex flex-column align-items-center w-100">
+      {% for message in get_flashed_messages() %}
+      <div class="toast" role="alert" data-bs-autohide="false" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <strong class="me-auto">Logout</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+          {{message}}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
   </header>
   <main>
     <div class="message">
@@ -121,7 +134,12 @@
         {%endif%}
 
         <br>
+        {%if (profile.fname)%}
         <a class="btn btn-dark ms-3" href="{{ url_for('update_profile') }}"> Update Profile </a>
+        {% else %} 
+        <input class='btn btn-crimson ms-3' id="submit" name="submit" type="submit" value="Create profile">
+        {% endif %}
+
 
       {%elif (update == True) %}
 
@@ -142,7 +160,7 @@
         <br>
         <input class='btn btn-dark ms-3' id="submit" name="submit" type="submit" value="Update profile">
       </form>
-      {% else %}
+      <!-- {% else %}
       <div class="form" id="display">
         <h5>Email: {{user.email}}</h5>
         <h5>First Name: {{profile.fname}}</h5>
@@ -151,7 +169,7 @@
         <h5>Gender: {{profile.gender}}</h5>
         <h5>Bio: {{profile.bio}}</h5>
         <h5>Profile Picture: {{profile.picture}} </h5>
-      </div>
+      </div> -->
       {% endif %}
 
     </div>
@@ -163,6 +181,6 @@
     {% endif %}
   </footer>
 
+  <script src="/static/scripts/toast.js"></script>
 </body>
-
 </html>
