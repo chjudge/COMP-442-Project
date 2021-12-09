@@ -80,7 +80,7 @@
     </div>
 
     <div class="container">
-      <form action="" class="form" method="post">
+      <form action="" class="form" method="post" enctype="multipart/form-data">
       {% if (update == False) %}
         {{form.hidden_tag()}}
         <h5>Email: {{user.email}}</h5>
@@ -96,6 +96,12 @@
         {{ form.lname(class='form-control', placeholder='Last name') }}
         {% endif %}
 
+        {% if profile.age != None %}
+        <h5>Age: {{profile.age}}</h5>
+        {% else %}
+        {{ form.age(class='form-control', placeholder='Age') }}
+        {% endif %}
+
         {% if profile.gender != None %}
         <h5>Gender: {{profile.gender}}</h5>
         {% else %}
@@ -108,6 +114,12 @@
         {{ form.bio(class='form-control', placeholder='Create your bio') }}
         {%endif%}
 
+        {% if profile.picture != None %}
+        <h5>Profile Picture: {{profile.picture}}</h5>
+        {% else %}
+        {{ form.picture(class='form-control', placeholder='Profile Picture') }}
+        {%endif%}
+
         <br>
         <a class="btn btn-dark ms-3" href="{{ url_for('update_profile') }}"> Update Profile </a>
 
@@ -118,10 +130,14 @@
           {{ form.fname(class='form-control', placeholder='First name') }}
           {{ form.lname.label }}
           {{ form.lname(class='form-control', placeholder='Last name') }}
+          {{ form.age.label }}
+          {{ form.age(class='form-control', placeholder='Age') }}
           {{ form.gender.label }}
           {{ form.gender(class='form-control', placeholder='Gender') }}
           {{ form.bio.label }}
           {{ form.bio(class='form-control', placeholder='Bio') }}
+          {{ form.picture.label }}
+          {{ form.picture(class='form-control', placeholder='Profile Picture') }}
 
         <br>
         <input class='btn btn-dark ms-3' id="submit" name="submit" type="submit" value="Update profile">
@@ -131,8 +147,10 @@
         <h5>Email: {{user.email}}</h5>
         <h5>First Name: {{profile.fname}}</h5>
         <h5>Last Name: {{profile.lname}}</h5>
+        <h5>Age: {{profile.age}}</h5>
         <h5>Gender: {{profile.gender}}</h5>
         <h5>Bio: {{profile.bio}}</h5>
+        <h5>Profile Picture: {{profile.picture}} </h5>
       </div>
       {% endif %}
 

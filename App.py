@@ -1,4 +1,5 @@
 from werkzeug.datastructures import MultiDict
+from werkzeug.utils import secure_filename
 from forms import ProfileForm, RegisterForm, LoginForm
 from hasher import Hasher
 import os, sys, datetime, re
@@ -27,6 +28,11 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.config['SECRET_KEY'] = 'correcthorsebatterystaple'
 app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{dbfile}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config["IMAGE_UPLOADS"] = "/profile_pictures"
+
+# Directory for file uploads
+# uploads_dir = os.path.join(app.instance_path, "profile_pictures")
+# os.makedirs(uploads_dir, exist_ok=True)
 
 # Getting the database object handle from the app
 db = SQLAlchemy(app)
@@ -64,12 +70,14 @@ class User(UserMixin, db.Model):
 class UserProfile(db.Model):
     __tablename__ = 'user_profiles'
     id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True, nullable=False)
+    picture = db.Column(db.Unicode, nullable = True)
+    age = db.Column(db.Integer, nullable = True)
     fname = db.Column(db.Unicode, nullable = True)
     lname = db.Column(db.Unicode, nullable = True)
     gender = db.Column(db.Enum('Male', 'Female'), nullable = True)
     bio = db.Column(db.Unicode, nullable = True)
-    interests = db.Column(db.Unicode, nullable = True) # TODO: make this into a list
-    dislikes = db.Column(db.Unicode, nullable = True) # TODO: make this into a list
+    interests = db.Column(db.Unicode, nullable = True) # Unused
+    dislikes = db.Column(db.Unicode, nullable = True) # Unused
 
     def __str__(self):
         return f"UserProfile(id={self.id}, fname={self.fname}, lname={self.lname})"
@@ -80,14 +88,16 @@ class UserProfile(db.Model):
     def serialize(self):
         return {
             "id": self.id,
+            "picture": self.picture,
             "fname": self.fname,
             "lname": self.lname,
             "gender": self.gender,
-            "bio": self.bio
+            "age": self.age
         }
     def profile_to_json(self):
         return {
             "id": self.id,
+            "picture": self.picture,
             "fname": self.fname,
             "lname": self.lname,
             "gender": self.gender,
@@ -237,8 +247,17 @@ def post_profile():
         user_profile = UserProfile.query.filter_by(id=current_user.get_id()).first()
         user_profile.fname = p_form.fname.data
         user_profile.lname = p_form.lname.data
+        user_profile.age = p_form.age.data
         user_profile.gender = p_form.gender.data
         user_profile.bio = p_form.bio.data
+
+        f = p_form.picture.data
+        filename = secure_filename(f.filename)
+        f.save(os.path.join(
+            "static", "profile_pictures", filename
+        ))
+
+        user_profile.picture = f"/static/profile_pictures/{filename}"
 
         db.session.commit()
     else:

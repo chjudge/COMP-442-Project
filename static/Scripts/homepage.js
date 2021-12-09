@@ -39,7 +39,7 @@ async function addProfiles(profiles) {
         * and keep adding profiles.
         */
         if (profile.fname !== null || profile.lname !== null ||
-            profile.gender !== null || profile.bio !== null) {
+            profile.gender !== null || profile.bio !== null || profile.picture !== null) {
             if (count !== 0 && count % 6 !== 0) {
                 console.log("if"); // Debugging
                 const prof = document.createElement("div");
@@ -52,9 +52,23 @@ async function addProfiles(profiles) {
                 profPad.classList.add("border");
                 profPad.classList.add("rounded");
                 profPad.classList.add("bg-light");
-                // profPad.setAttribute("value", profile.id);
-                profPad.innerText = profile.fname + " " + profile.lname + "\n"
-                    + profile.gender + "\n" + profile.bio;
+                profPad.classList.add("row-eq-height");
+
+                const profilePic = document.createElement("img");
+                profilePic.src = profile.picture;
+                profilePic.alt = "Profile Picture";
+                profilePic.classList.add("preview");
+
+                const imageDiv = document.createElement("div");
+                imageDiv.classList.add("pfp");
+                profPad.appendChild(imageDiv);
+                imageDiv.appendChild(profilePic);
+
+                const text = document.createElement("p");
+                text.classList.add("blurb");
+                text.innerText = profile.fname + " " + profile.lname + "\n"
+                + profile.age + ", " + profile.gender;
+                insertAfter(text, imageDiv);
 
                 row.appendChild(prof);
                 prof.appendChild(profPad);
@@ -85,9 +99,23 @@ async function addProfiles(profiles) {
                 profPad.classList.add("border");
                 profPad.classList.add("rounded");
                 profPad.classList.add("bg-light");
-                // profPad.setAttribute("value", profile.id);
-                profPad.innerText = profile.fname + " " + profile.lname + "\n"
-                    + profile.gender + "\n" + profile.bio;
+                profPad.classList.add("row-eq-height");
+
+                const profilePic = document.createElement("img");
+                profilePic.src = profile.picture;
+                profilePic.alt = "Profile Picture";
+                profilePic.classList.add("preview");
+
+                const imageDiv = document.createElement("div");
+                imageDiv.classList.add("pfp");
+                profPad.appendChild(imageDiv);
+                imageDiv.appendChild(profilePic);
+
+                const text = document.createElement("p");
+                text.classList.add("blurb");
+                text.innerText = profile.fname + " " + profile.lname + "\n"
+                + profile.age + ", " + profile.gender;
+                insertAfter(text, imageDiv);
 
                 row.appendChild(prof);
                 prof.appendChild(profPad);
@@ -143,6 +171,10 @@ async function viewProfile(id) {
         .catch(error => {
             console.log("Profile Fetch Failed: ", error)
         })
+}
+
+function insertAfter(newNode, referenceNode) {
+    referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
 }
 
 /**

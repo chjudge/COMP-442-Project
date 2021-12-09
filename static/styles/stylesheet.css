@@ -27,6 +27,7 @@ h1, h3 {
 .row {
     margin-top: 10px;
     margin-bottom: 10px;
+
 }
 
 .form {
@@ -54,6 +55,24 @@ h1, h3 {
 transform: scale(1.01);
 }
 
+.preview {
+    max-width: 175px;
+    max-height: 130px;
+}
+
+.pfp {
+    text-align: center !important;
+    width: 175px;
+    height: 130px;
+}
+
+.blurb {
+    text-align: left;
+}
+
+.navbar-toggler {
+    background-color: rgb(199, 199, 199) !important;
+}
 
 button {
     justify-content: center;
