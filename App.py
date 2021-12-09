@@ -217,7 +217,7 @@ def get_profile():
 # allow user to update
 @app.get('/profile/update/')
 @login_required
-def update_profile():
+def get_update_profile():
     user_profile = UserProfile.query.filter_by(id=current_user.get_id()).first()
     p_form = ProfileForm(formdata=MultiDict({"fname": user_profile.fname, "lname": user_profile.lname, "age": user_profile.age,
         "gender": user_profile.gender, "bio": user_profile.bio, "picture": user_profile.picture}))
@@ -228,7 +228,7 @@ def update_profile():
 @login_required
 def post_update_profile():
     p_form = ProfileForm()
-    # update bio
+
     if p_form.validate():
         user_profile = UserProfile.query.filter_by(id=current_user.get_id()).first()
         user_profile.fname = p_form.fname.data
@@ -237,17 +237,19 @@ def post_update_profile():
         user_profile.gender = p_form.gender.data
         user_profile.bio = p_form.bio.data
 
+        # upload profile picture
         f = p_form.picture.data
         filename = secure_filename(f.filename)
         f.save(os.path.join(
             "static", "profile_pictures", filename
         ))
-
+        # save profile picture to db
         user_profile.picture = f"/static/profile_pictures/{filename}"
 
         db.session.commit()
 
-        return redirect(url_for("get_preferences"))
+        # redirect back to profile page
+        return redirect(url_for("get_profile"))
 
     else:
         print('failure')
@@ -259,9 +261,9 @@ def post_update_profile():
         for field, error in p_form.errors.items():
             print(f"{field}: {str(error)}")
             flash(f"{re.sub(exclude, '', str(error))}")
-    return redirect(url_for('get_profile'))
+    return redirect(url_for('get_update_profile'))
 
-# facilitate updates to user profile information
+# post for initially creating profile
 @app.post('/profile/')
 @login_required
 def post_profile():
@@ -285,6 +287,7 @@ def post_profile():
 
         db.session.commit()
 
+        # redirect directly to preferences
         return redirect(url_for("get_preferences"))
 
     else:
