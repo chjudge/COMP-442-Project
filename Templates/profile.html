@@ -93,105 +93,58 @@
 
     <div class="container">
       <form action="" class="form" method="post" enctype="multipart/form-data">
-        {% if (update == False) %}
-        {{form.hidden_tag()}}
         <h5>Email: {{user.email}}</h5>
-        {% if profile.fname != None %}
-        <h5>First Name: {{profile.fname}}</h5>
-        {% else %}
-        {{ form.fname(class='form-control', placeholder='First name') }}
-        {% endif %}
 
-        {% if profile.lname != None %}
-        <h5>Last Name: {{profile.lname}}</h5>
-        {% else %}
-        {{ form.lname(class='form-control', placeholder='Last name') }}
-        {% endif %}
+        {% if profile.fname == None %}
+          {{ form.hidden_tag()}}
+          {{ form.fname(class='form-control', placeholder='First name') }}
+          {{ form.lname(class='form-control', placeholder='Last name') }}
+          {{ form.age(class='form-control', placeholder='Age') }}
+          {{ form.gender(class='form-control', placeholder='Gender') }}
+          {{ form.bio(class='form-control', placeholder='Bio') }}
+          {{ form.picture.label }}
+          {{ form.picture(class='form-control', placeholder='Profile Picture') }}
 
-        {% if profile.age != None %}
-        <h5>Age: {{profile.age}}</h5>
-        {% else %}
-        {{ form.age(class='form-control', placeholder='Age') }}
-        {% endif %}
+          <div>
+            <input class='btn btn-crimson ms-3' id="submit" name="submit" type="submit" value="Add Preferences >">
+          </div>          
 
-        {% if profile.gender != None %}
-        <h5>Gender: {{profile.gender}}</h5>
-        {% else %}
-        {{ form.gender(class='form-control') }}
-        {% endif %}
+        {% elif (update == False) %}
+          <h5>First Name: {{profile.fname}}</h5>
+          <h5>Last Name: {{profile.lname}}</h5>
+          <h5>Age: {{profile.age}}</h5>
+          <h5>Gender: {{profile.gender}}</h5>
+          <h5>Bio: {{profile.bio}}</h5>
+          <div class="profile-page-pfp-div">
+            <h5>Profile Picture: <br> <img src="{{profile.picture}}" class="profile-page-pfp"></h5>
+          </div>
 
-        {% if profile.bio != None %}
-        <h5>Bio: {{profile.bio}}</h5>
-        {% else %}
-        {{ form.bio(class='form-control', placeholder='Create your bio') }}
-        {%endif%}
-
-        <!-- {% if profile.bio != None %}
-        <h5>Bio: {{profile.bio}}</h5>
-        {% else %}
-        {{ form.bio(class='form-control', placeholder='Create your bio') }}
-        {%endif%}
-
-        {% if profile.bio != None %}
-        <h5>Bio: {{profile.bio}}</h5>
-        {% else %}
-        {{ form.bio(class='form-control', placeholder='Create your bio') }}
-        {%endif%} -->
-
-        {% if profile.picture != None %}
-        <div class="profile-page-pfp-div">
-          <h5>Profile Picture: <br> <img src="{{profile.picture}}" class="profile-page-pfp"></h5>
-        </div>
-        {% else %}
-        {{ form.picture(class='form-control', placeholder='Profile Picture') }}
-        {%endif%}
-
-        <br>
-        {%if (profile.fname)%}
-        <a class="btn btn-dark ms-3" href="{{ url_for('get_update_profile') }}"> Update Profile </a>
-        {% else %} 
-        <input class='btn btn-crimson ms-3' id="submit" name="submit" type="submit" value="Add Preferences >">
-        {% endif %}
-
-        {% if preferences.ageStart and preferences.ageEnd and preferences.gender and profile.fname%}
-        <a class="btn btn-dark ms-3" href="{{ url_for('get_preferences_update') }}"> Update Preferences </a>
-        {% elif profile.fname%}
-        <a class="btn btn-dark ms-3" href="{{ url_for('get_preferences') }}"> Create Preferences </a>
-        {% endif %}
+          <!--  -->
+          <div id ='update_buttons'>
+            <a class="btn btn-dark ms-3" href="{{ url_for('get_update_profile') }}"> Update Profile </a>
+            <a class="btn btn-dark ms-3" href="{{ url_for('get_preferences_update') }}"> Update Preferences </a>
+          </div>
 
         {%elif (update == True) %}
 
-        {{ form.hidden_tag()}}
-        {{ form.fname.label }}
-        {{ form.fname(class='form-control', placeholder='First name') }}
-        {{ form.lname.label }}
-        {{ form.lname(class='form-control', placeholder='Last name') }}
-        {{ form.age.label }}
-        {{ form.age(class='form-control', placeholder='Age') }}
-        {{ form.gender.label }}
-        {{ form.gender(class='form-control', placeholder='Gender') }}
-        {{ form.bio.label }}
-        {{ form.bio(class='form-control', placeholder='Bio') }}
-        {{ form.picture.label }}
-        {{ form.picture(class='form-control', placeholder='Profile Picture') }}
+          {{ form.hidden_tag()}}
+          {{ form.fname.label }}
+          {{ form.fname(class='form-control', placeholder='First name') }}
+          {{ form.lname.label }}
+          {{ form.lname(class='form-control', placeholder='Last name') }}
+          {{ form.age.label }}
+          {{ form.age(class='form-control', placeholder='Age') }}
+          {{ form.gender.label }}
+          {{ form.gender(class='form-control', placeholder='Gender') }}
+          {{ form.bio.label }}
+          {{ form.bio(class='form-control', placeholder='Bio') }}
+          {{ form.picture.label }}
+          {{ form.picture(class='form-control', placeholder='Profile Picture') }}
 
-        <br>
-        <input class='btn btn-dark ms-3' id="submit" name="submit" type="submit" value="Update profile">
+          <br>
+          <input class='btn btn-dark ms-3' id="submit" name="submit" type="submit" value="Update profile">
+        {%endif%}
       </form>
-      <!-- {% else %}
-      <div class="form" id="display">
-        <h5>Email: {{user.email}}</h5>
-        <h5>First Name: {{profile.fname}}</h5>
-        <h5>Last Name: {{profile.lname}}</h5>
-        <h5>Age: {{profile.age}}</h5>
-        <h5>Gender: {{profile.gender}}</h5>
-        <h5>Bio: {{profile.bio}}</h5>
-
-        <h5>Profile Picture:</h5>
-        <img src="{{profile.picture}}">
-      </div> -->
-      {% endif %}
-
     </div>
   </main>
 
