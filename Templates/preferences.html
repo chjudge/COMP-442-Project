@@ -79,17 +79,25 @@
         {{ form.gender(class='form-control') }}
         {% endif %}
 
-        {% if preferences.ageStart != None || preferences.ageEnd != None %}
-        <h5>Age Preference: {{preferences.ageStart}} - {{preferences.ageEnd}}</h5>
+        {% if preferences.ageStart != None %}
+        <h5>Minimum Age: {{preferences.ageStart}}</h5>
         {% else %}
-        {{ form.age(class='form-control', placeholder='Age Preference') }}
+        {{ form.ageStart(class='form-control', placeholder='Minimum Age') }}
         {% endif %}
+
+        {% if preferences.ageEnd != None %}
+        <h5>Maximum Age: {{preferences.ageEnd}}</h5>
+        {% else %}
+        {{ form.ageEnd(class='form-control', placeholder='Maximum Age') }}
+        {% endif %}
+
+        {{form.submit()}}
 
         <!-- <br>
         <a class="btn btn-dark ms-3" href="{{ url_for('update_profile') }}"> Update Profile </a> -->
 
         {% elif (update == True) %}
-
+<!-- 
         {{ form.hidden_tag()}}
         {{ form.fname.label }}
         {{ form.fname(class='form-control', placeholder='First name') }}
@@ -117,17 +125,14 @@
         <h5>Bio: {{profile.bio}}</h5>
         <h5>Profile Picture:</h5>
         <img src="{{profile.picture}}">
-      </div>
+      </div>-->
       {% endif %}
-
     </div>
   </main>
 
-  <footer>
-    {%if (profile.fname)%}
-    <a id="back" href="/"> Back to Homepage </a>
-    {% endif %}
-  </footer>
+  <!-- <footer>
+    
+  </footer> -->
 
 </body>
 

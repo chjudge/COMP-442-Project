@@ -113,7 +113,7 @@ class UserPreferences(db.Model):
     ageStart = db.Column(db.Integer, nullable = True)
     ageEnd = db.Column(db.Integer, nullable = True)
 
-db.drop_all() # (K) Added this to fix querying issues. Use it as needed
+# db.drop_all() # (K) Added this to fix querying issues. Use it as needed
 db.create_all()
 
 # show user registration form
@@ -146,6 +146,10 @@ def post_register():
             # add name to profile
             user_profile = UserProfile(id=User.query.filter_by(email=r_form.email.data).first().id)
             db.session.add(user_profile)
+            db.session.commit()
+
+            user_preferences = UserPreferences(id=User.query.filter_by(email=r_form.email.data).first().id)
+            db.session.add(user_preferences)
             db.session.commit()
 
             # (K) trying something
@@ -209,6 +213,7 @@ def get_profile():
     p_form = ProfileForm()
     # pass through the profile of the current user
     user_profile = UserProfile.query.filter_by(id=current_user.get_id()).first()
+    # return redirect(url_for("get_preferences")) probs delete
     return render_template('profile.html', user=current_user, profile=user_profile, form=p_form, update = False)
 
 # allow user to update
@@ -269,6 +274,7 @@ def post_profile():
         db.session.commit()
 
         return redirect(url_for("get_preferences"))
+
     else:
         print('failure')
         print(p_form.fname.data)
@@ -284,13 +290,25 @@ def post_profile():
 def get_preferences():
     form = PreferencesForm()
     preferences = UserPreferences.query.filter_by(id=current_user.get_id()).first()
-    return render_template('profile.html', user=current_user, preferences = preferences, form=form, update = False)
+    return render_template('preferences.html', user=current_user, preferences = preferences, form=form, update = False)
 
 @app.post("/profile/preferences/")
 def post_preferences():
     form = PreferencesForm()
     if form.validate():
-        pass
+        preferences = UserPreferences.query.filter_by(id=current_user.get_id()).first()
+        preferences.gender = form.gender.data
+        preferences.ageStart = form.ageStart.data
+        preferences.ageEnd = form.ageEnd.data
+
+        db.session.commit()
+    else:
+        exclude = r'[\'\[\]]'
+        for field, error in form.errors.items():
+            print(f"{field}: {str(error)}")
+            flash(f"{re.sub(exclude, '', str(error))}")
+        return redirect(url_for('get_preferences'))
+    return redirect(url_for("get_profile"))
 
 # show admin only page, view and remove users
 @app.get('/admin/')
