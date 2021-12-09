@@ -62,13 +62,12 @@
           {% endif %}
         </div>
       </div>
-      </div>
     </nav>
     <div class="toast-container d-flex flex-column align-items-center w-100">
       {% for message in get_flashed_messages() %}
       <div class="toast" role="alert" data-bs-autohide="false" aria-live="assertive" aria-atomic="true">
         <div class="toast-header">
-          <strong class="me-auto">Logout</strong>
+          <strong class="me-auto">Error</strong>
           <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
         <div class="toast-body">
@@ -185,7 +184,7 @@
 
         <h5>Profile Picture:</h5>
         <img src="{{profile.picture}}">
-      </div>
+      </div> -->
       {% endif %}
 
     </div>
