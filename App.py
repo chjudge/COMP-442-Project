@@ -7,6 +7,7 @@ from flask import Flask, render_template, url_for, redirect, request, session, f
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, LoginManager, login_required
 from flask_login import login_user, logout_user, current_user
+from flask_socketio import SocketIO, emit, join_room
 
 # Make sure this directory is in your Python path for imports
 scriptdir = os.path.dirname(os.path.abspath(__file__))
@@ -36,6 +37,9 @@ app.config["IMAGE_UPLOADS"] = "/profile_pictures"
 
 # Getting the database object handle from the app
 db = SQLAlchemy(app)
+
+# Create socket for chat
+socketio = SocketIO(app)
 
 # Prepare and connect the LoginManager to this app
 app.login_manager = LoginManager()
@@ -113,8 +117,15 @@ class UserPreferences(db.Model):
     ageStart = db.Column(db.Integer, nullable = True)
     ageEnd = db.Column(db.Integer, nullable = True)
 
-db.drop_all() # (K) Added this to fix querying issues. Use it as needed
-db.create_all()
+class ChatLogs(db.Model):
+    __tablename__ = 'chat_logs'
+    time = db.Column(db.DateTime, primary_key = True, nullable = False)
+    sender = db.Column(db.Integer, db.ForeignKey('users.id'), nullable = False)
+    recipient = db.Column(db.Integer, db.ForeignKey('users.id'), nullable = False)
+    content = db.Column(db.Unicode, nullable = False)
+
+# db.drop_all() # (K) Added this to fix querying issues. Use it as needed
+# db.create_all()
 
 # show user registration form
 @app.get('/register/')
@@ -339,8 +350,7 @@ def post_admin_page():
     else:
         return redirect(url_for('index'))
 
-        # return default page
-
+# return default page
 @app.get('/')
 def index():
     return render_template("welcome.html", user = current_user)
@@ -369,3 +379,40 @@ def get_other_profile(user_id): # Rename eventually
         "requested": datetime.datetime.now(),
         "profile": profile.profile_to_json()
     })
+
+@app.get('/chat/')
+@login_required
+def get_chat_page():
+    # return render_template('chat.html', room = session['room'])
+    other_user_id = request.args.get("user")
+    other_user = User.query.filter_by(id=other_user_id).first()
+    if(other_user is not None and other_user.id != current_user.id):
+        print('connected to chat')
+        session['room'] = (current_user.id * 17) + (other_user.id * 17) + (current_user.id * 23) + (other_user.id * 23)
+        return render_template('chat.html', user = current_user, other_user = other_user)
+    return redirect(url_for('index'))
+
+@socketio.on('joined')
+def joined(message):
+    print(f'{current_user.email} joined')
+    # """Sent by clients when they enter a room.
+    # A status message is broadcast to all people in the room."""
+    room = session.get('room')
+    join_room(room)
+    emit('status', {'msg': f'{current_user.email} has entered the room.'}, room=room)
+    # emit('status', {'msg': f'{session.get("name")} has entered the room.'}, broadcast=True)
+
+
+@socketio.on('text')
+def text(message):
+    print(message)
+    # Sent by a client when the user entered a new message.
+    # The message is sent to all people in the room.
+    room = session.get('room')
+    emit('message', {'msg': f'{current_user.email} : {message["msg"]}'}, room=room)
+    # emit('message', {'msg': f'{session.get("name")} : {message["msg"]}'}, broadcast=True)
+
+
+
+if __name__ == '__main__':
+    socketio.run(app, debug=True)
