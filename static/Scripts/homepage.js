@@ -153,18 +153,58 @@ async function viewProfile(id) {
 
             const profileContent = document.createElement("div");
             profileContent.id = "current-profile-content";
-            profileContent.innerText = data.profile.fname;
-
-            console.log(data);
-
+            // profileContent.innerText = data.profile.fname;
             profile.appendChild(profileContent);
 
+            // Naming starts to make a little more sense here
+            const pfpDiv = document.createElement("div");
+            pfpDiv.id = "pfp-div";
+            profileContent.appendChild(pfpDiv);
+            const pfp = document.createElement("img");
+            pfp.src = data.profile.picture;
+            pfp.id = "pfp";
+            pfpDiv.appendChild(pfp);
+
+            const contentDiv = document.createElement("div");
+            contentDiv.id = "content-div";
+            insertAfter(contentDiv, pfpDiv);
+            const content = document.createElement("div");
+            content.id = "content";
+            contentDiv.appendChild(content);
+
+            const bioTitle = document.createElement("h3");
+            bioTitle.classList.add("current-profile-titles");
+            bioTitle.innerText = "Bio";
+            content.appendChild(bioTitle);
+            const bio = document.createElement("p");
+            bio.classList.add("current-profile-content");
+            bio.innerText = data.profile.bio;
+            bioTitle.appendChild(bio);
+
+            const interestsTitle = document.createElement("h3");
+            interestsTitle.classList.add("current-profile-titles");
+            insertAfter(interestsTitle, bioTitle);
+            const interests = document.createElement("p");
+            interests.classList.add("current-profile-content");
+            interests.innerText = data.profile.interests;
+            interestsTitle.appendChild(interests);
+
+            const dislikesTitle = document.createElement("h3");
+            dislikesTitle.classList.add("current-profile-titles");
+            insertAfter(dislikesTitle, interestsTitle);
+            const dislikes = document.createElement("p");
+            dislikes.classList.add("current-profile-content");
+            dislikes.innerText = data.profile.dislikes;
+            dislikesTitle.appendChild(dislikes);
+
+            document.body.style.overflow = "hidden";
             profile.style.display = "block";
 
             window.onclick = function(event) {
                 if (event.target.id === "current-profile") {
                     event.target.style.display = "none";
                     document.getElementById("current-profile").innerHTML = null;
+                    document.body.style.overflow = "visible";
                 }
             }
         })
