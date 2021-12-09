@@ -17,7 +17,11 @@
 
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
   <script type="text/javascript" charset="utf-8">
-    var socket;
+    let socket;
+    let userID = {{ user.id }}
+    let otherUserID = {{ other_user.id }}
+    console.log(userID)
+    console.log(otherUserID)
     window.addEventListener('DOMContentLoaded', (event) => {
       console.log(`loaded`);
       socket = io.connect(`http://${document.domain}:${location.port}`);
@@ -26,12 +30,15 @@
         socket.emit('joined', {});
       });
       socket.on('status', function (data) {
-        document.querySelector('#chat').textContent = `${document.querySelector('#chat').textContent}<${data.msg}>\n`;
-        document.querySelector('#chat').scrollTop = document.querySelector('#chat').scrollHeight;
+        let title = document.querySelector('#title');
+        title.textContent = `${title.textContent} ${data.msg}\n`;
       });
       socket.on('message', function (data) {
-        document.querySelector('#chat').textContent = `${document.querySelector('#chat').textContent}${data.msg}\n`;
-        document.querySelector('#chat').scrollTop = document.querySelector('#chat').scrollHeight;
+        let chat = document.querySelector('#chat')
+        let text = document.createElement('p')
+        text.textContent = data.msg
+        chat.appendChild(text)
+        // document.querySelector('#chat').scrollTop = document.querySelector('#chat').scrollHeight;
       });
       let textBox = document.querySelector('#text')
 
@@ -42,16 +49,21 @@
           textBox.value = '';
           if (text != '') {
             console.log(text);
-            socket.emit('text', { msg: text });
+            socket.emit('text', { msg: text, sent: userID, to: otherUserID });
           }
         }
       });
     });
 
   </script>
-  <h1>Chat {{ room }}</h1>
-  <textarea id="chat" cols="80" rows="20"></textarea><br><br>
-  <input id="text" size="80" placeholder="Enter your message here"><br><br>
+  <h1 id="title">Chat with {{ other_user.email }}</h1>
+  <div id="chat" class="col-6 mh-100 overflow-auto py-2">
+    {% for chat in chats %}
+    <p>{{ chat[0] }} : {{chat[1]}}</p>
+    {% endfor %}
+  </div>
+  <!-- <textarea id="chat" cols="80" rows="20">{% for chat in chats %}{{ chat[0] }} : {{chat[1]}}{% endfor %}</textarea><br><br> -->
+  <input id="text" size="80" placeholder="Enter your message here">
 
 
   <!-- <script src="/static/scripts/chat.js"></script> -->

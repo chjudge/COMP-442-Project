@@ -2,7 +2,10 @@ from werkzeug.datastructures import MultiDict
 from werkzeug.utils import secure_filename
 from forms import ProfileForm, RegisterForm, LoginForm, PreferencesForm
 from hasher import Hasher
-import os, sys, datetime, re
+import os
+import sys
+import datetime
+import re
 from flask import Flask, render_template, url_for, redirect, request, session, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, LoginManager, login_required
@@ -45,9 +48,11 @@ socketio = SocketIO(app)
 app.login_manager = LoginManager()
 app.login_manager.login_view = 'get_login'
 
+
 @app.login_manager.user_loader
 def user_loader(id):
     return User.query.get(int(id))
+
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -76,20 +81,24 @@ class User(UserMixin, db.Model):
     #     return str(self)
 
 # store data for users profile information
+
+
 class UserProfile(db.Model):
     __tablename__ = 'user_profiles'
-    id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True, nullable=False)
-    picture = db.Column(db.Unicode, nullable = True)
-    age = db.Column(db.Integer, nullable = True)
-    fname = db.Column(db.Unicode, nullable = True)
-    lname = db.Column(db.Unicode, nullable = True)
-    gender = db.Column(db.Enum('Male', 'Female'), nullable = True)
-    bio = db.Column(db.Unicode, nullable = True)
-    interests = db.Column(db.Unicode, nullable = True) # Unused
-    dislikes = db.Column(db.Unicode, nullable = True) # Unused
+    id = db.Column(db.Integer, db.ForeignKey('users.id'),
+                   primary_key=True, nullable=False)
+    picture = db.Column(db.Unicode, nullable=True)
+    age = db.Column(db.Integer, nullable=True)
+    fname = db.Column(db.Unicode, nullable=True)
+    lname = db.Column(db.Unicode, nullable=True)
+    gender = db.Column(db.Enum('Male', 'Female'), nullable=True)
+    bio = db.Column(db.Unicode, nullable=True)
+    interests = db.Column(db.Unicode, nullable=True)  # Unused
+    dislikes = db.Column(db.Unicode, nullable=True)  # Unused
 
     def __str__(self):
         return f"UserProfile(id={self.id}, fname={self.fname}, lname={self.lname})"
+
     def __repr__(self):
         return f"UserProfile(id={self.id}, fname={self.fname}, lname={self.lname})"
 
@@ -103,6 +112,7 @@ class UserProfile(db.Model):
             "gender": self.gender,
             "age": self.age
         }
+
     def profile_to_json(self):
         return {
             "id": self.id,
@@ -115,36 +125,48 @@ class UserProfile(db.Model):
             "dislikes": self.dislikes
         }
 
+
 class UserPreferences(db.Model):
     __tablename__ = "user_preferences"
-    id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key = True, nullable = False)
-    gender = db.Column(db.Enum('Male', 'Female'), nullable = True)
-    ageStart = db.Column(db.Integer, nullable = True)
-    ageEnd = db.Column(db.Integer, nullable = True)
+    id = db.Column(db.Integer, db.ForeignKey("users.id"),
+                   primary_key=True, nullable=False)
+    gender = db.Column(db.Enum('Male', 'Female'), nullable=True)
+    ageStart = db.Column(db.Integer, nullable=True)
+    ageEnd = db.Column(db.Integer, nullable=True)
+
 
 class ChatLogs(db.Model):
     __tablename__ = 'chat_logs'
-    time = db.Column(db.DateTime, primary_key = True, nullable = False)
-    sender = db.Column(db.Integer, db.ForeignKey('users.id'), nullable = False)
-    recipient = db.Column(db.Integer, db.ForeignKey('users.id'), nullable = False)
-    content = db.Column(db.Unicode, nullable = False)
+    time = db.Column(db.DateTime(timezone=True),
+                     primary_key=True, nullable=False)
+    room = db.Column(db.Integer, nullable=False)
+    sender = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    recipient = db.Column(
+        db.Integer, db.ForeignKey('users.id'), nullable=False)
+    content = db.Column(db.Unicode, nullable=False)
 
 # db.drop_all() # (K) Added this to fix querying issues. Use it as needed
 # db.create_all()
 
 # show user registration form
+
+
 @app.get('/register/')
 def get_register():
     r_form = RegisterForm()
     return render_template('register.html', form=r_form)
 
 # show user login form
+
+
 @app.get('/login/')
 def get_login():
     l_form = LoginForm()
     return render_template('login.html', form=l_form)
 
 # validate registration form
+
+
 @app.post('/register/')
 def post_register():
     r_form = RegisterForm()
@@ -160,15 +182,17 @@ def post_register():
             db.session.commit()
 
             # add name to profile
-            user_profile = UserProfile(id=User.query.filter_by(email=r_form.email.data).first().id)
+            user_profile = UserProfile(id=User.query.filter_by(
+                email=r_form.email.data).first().id)
             db.session.add(user_profile)
             db.session.commit()
 
-            user_preferences = UserPreferences(id=User.query.filter_by(email=r_form.email.data).first().id)
+            user_preferences = UserPreferences(
+                id=User.query.filter_by(email=r_form.email.data).first().id)
             db.session.add(user_preferences)
             db.session.commit()
 
-            login_user(user) 
+            login_user(user)
 
             return redirect(url_for('get_profile'))
         else:  # flash error if account exists
@@ -183,6 +207,8 @@ def post_register():
         return redirect(url_for('get_register'))
 
 # validate login form
+
+
 @app.post('/login/')
 def post_login():
     l_form = LoginForm()
@@ -213,6 +239,8 @@ def post_login():
         return redirect(url_for('get_login'))
 
 # logout user account
+
+
 @app.get('/logout/')
 @login_required
 def get_logout():
@@ -221,24 +249,32 @@ def get_logout():
     return redirect(url_for('index'))
 
 # display user's profile information
+
+
 @app.get('/profile/')
 @login_required
 def get_profile():
     p_form = ProfileForm()
     # pass through the profile of the current user
-    user_profile = UserProfile.query.filter_by(id=current_user.get_id()).first()
-    user_preferences = UserPreferences.query.filter_by(id=current_user.get_id()).first()
-    return render_template('profile.html', user=current_user, profile=user_profile, preferences=user_preferences, form=p_form, update = False)
+    user_profile = UserProfile.query.filter_by(
+        id=current_user.get_id()).first()
+    user_preferences = UserPreferences.query.filter_by(
+        id=current_user.get_id()).first()
+    return render_template('profile.html', user=current_user, profile=user_profile, preferences=user_preferences, form=p_form, update=False)
 
 # allow user to update
+
+
 @app.get('/profile/update/')
 @login_required
 def get_update_profile():
-    user_profile = UserProfile.query.filter_by(id=current_user.get_id()).first()
+    user_profile = UserProfile.query.filter_by(
+        id=current_user.get_id()).first()
     p_form = ProfileForm(formdata=MultiDict({"fname": user_profile.fname, "lname": user_profile.lname, "age": user_profile.age,
-        "gender": user_profile.gender, "bio": user_profile.bio, "picture": user_profile.picture}))
+                                             "gender": user_profile.gender, "bio": user_profile.bio, "picture": user_profile.picture}))
     print(user_profile.picture)
-    return render_template('profile.html', user=current_user, profile=user_profile, form=p_form, update = True)
+    return render_template('profile.html', user=current_user, profile=user_profile, form=p_form, update=True)
+
 
 @app.post('/profile/update/')
 @login_required
@@ -246,7 +282,8 @@ def post_update_profile():
     p_form = ProfileForm()
 
     if p_form.validate():
-        user_profile = UserProfile.query.filter_by(id=current_user.get_id()).first()
+        user_profile = UserProfile.query.filter_by(
+            id=current_user.get_id()).first()
         user_profile.fname = p_form.fname.data
         user_profile.lname = p_form.lname.data
         user_profile.age = p_form.age.data
@@ -280,13 +317,16 @@ def post_update_profile():
     return redirect(url_for('get_update_profile'))
 
 # post for initially creating profile
+
+
 @app.post('/profile/')
 @login_required
 def post_profile():
     p_form = ProfileForm()
     # update bio
     if p_form.validate():
-        user_profile = UserProfile.query.filter_by(id=current_user.get_id()).first()
+        user_profile = UserProfile.query.filter_by(
+            id=current_user.get_id()).first()
         user_profile.fname = p_form.fname.data
         user_profile.lname = p_form.lname.data
         user_profile.age = p_form.age.data
@@ -318,18 +358,22 @@ def post_profile():
             flash(f"{re.sub(exclude, '', str(error))}")
     return redirect(url_for('get_profile'))
 
+
 @app.get("/profile/preferences/")
 @login_required
 def get_preferences():
     form = PreferencesForm()
-    preferences = UserPreferences.query.filter_by(id=current_user.get_id()).first()
-    return render_template('preferences.html', user=current_user, preferences = preferences, form=form, update = False)
+    preferences = UserPreferences.query.filter_by(
+        id=current_user.get_id()).first()
+    return render_template('preferences.html', user=current_user, preferences=preferences, form=form, update=False)
+
 
 @app.post("/profile/preferences/")
 def post_preferences():
     form = PreferencesForm()
     if form.validate():
-        preferences = UserPreferences.query.filter_by(id=current_user.get_id()).first()
+        preferences = UserPreferences.query.filter_by(
+            id=current_user.get_id()).first()
         preferences.gender = form.gender.data
         preferences.ageStart = form.ageStart.data
         preferences.ageEnd = form.ageEnd.data
@@ -343,19 +387,24 @@ def post_preferences():
         return redirect(url_for('get_preferences'))
     return redirect(url_for("get_profile"))
 
+
 @app.get("/profile/preferences/update/")
 @login_required
 def get_preferences_update():
-    user_profile = UserPreferences.query.filter_by(id=current_user.get_id()).first()
-    form = PreferencesForm(formdata=MultiDict({"ageStart": user_profile.ageStart, "ageEnd": user_profile.ageEnd, "gender": user_profile.gender}))
-    return render_template('preferences.html', user=current_user, profile=user_profile, form=form, update = True)
+    user_profile = UserPreferences.query.filter_by(
+        id=current_user.get_id()).first()
+    form = PreferencesForm(formdata=MultiDict(
+        {"ageStart": user_profile.ageStart, "ageEnd": user_profile.ageEnd, "gender": user_profile.gender}))
+    return render_template('preferences.html', user=current_user, profile=user_profile, form=form, update=True)
+
 
 @app.post("/profile/preferences/update/")
 @login_required
 def post_update_preferences():
     form = PreferencesForm()
     if form.validate():
-        preferences = UserPreferences.query.filter_by(id=current_user.get_id()).first()
+        preferences = UserPreferences.query.filter_by(
+            id=current_user.get_id()).first()
         preferences.gender = form.gender.data
         preferences.ageStart = form.ageStart.data
         preferences.ageEnd = form.ageEnd.data
@@ -367,9 +416,11 @@ def post_update_preferences():
             print(f"{field}: {str(error)}")
             flash(f"{re.sub(exclude, '', str(error))}")
         return redirect(url_for('get_preferences'))
-    return redirect(url_for("get_profile"))    
+    return redirect(url_for("get_profile"))
 
 # show admin only page, view and remove users
+
+
 @app.get('/admin/')
 @login_required
 def get_admin_page():
@@ -382,6 +433,8 @@ def get_admin_page():
         return redirect(url_for('index'))
 
 # update database from admin page
+
+
 @app.post('/admin/')
 @login_required
 def post_admin_page():
@@ -391,7 +444,8 @@ def post_admin_page():
             user = User.query.filter_by(id=user_id).first()
             # remove users
             if user is not None:
-                db.session.delete(UserProfile.query.filter_by(id=user_id).first())
+                db.session.delete(
+                    UserProfile.query.filter_by(id=user_id).first())
                 db.session.delete(user)
                 db.session.commit()
                 flash(f'User #{user_id} has been removed')
@@ -399,7 +453,8 @@ def post_admin_page():
             user_id = request.form.get('view_profile')
             # get user requested by admin page
             user = User.query.filter_by(id=user_id).first()
-            user_profile = UserProfile.query.filter_by(id=user.get_id()).first()
+            user_profile = UserProfile.query.filter_by(
+                id=user.get_id()).first()
             # go to user profile
             return render_template('profile.html', user=user, profile=user_profile)
         elif request.form.get('make_admin') is not None:
@@ -415,83 +470,119 @@ def post_admin_page():
         return redirect(url_for('index'))
 
 # return default page
+
+
 @app.get('/')
 def index():
-    return render_template("welcome.html", user = current_user)
+    return render_template("welcome.html", user=current_user)
+
 
 @app.get("/home/")
 @login_required
 def get_homepage():
-    return render_template("homepage.html", user = current_user)
+    return render_template("homepage.html", user=current_user)
+
 
 @app.get("/about/")
 def get_about_page():
     pass
 
+
 @app.get("/api/v1/profiles/")
 def get_profiles():
-    user_preferences = UserPreferences.query.filter_by(id=current_user.get_id()).first() 
+    user_preferences = UserPreferences.query.filter_by(
+        id=current_user.get_id()).first()
 
     if user_preferences.ageStart and user_preferences.ageEnd and user_preferences.gender:
         admin = User.query.filter(User.admin == True).all()
-        profiles = UserProfile.query.filter(UserProfile.age <= user_preferences.ageEnd, 
-            UserProfile.age >= user_preferences.ageStart, 
-            UserProfile.gender == user_preferences.gender,
-            UserProfile.id != current_user.get_id()).all()
+        profiles = UserProfile.query.filter(UserProfile.age <= user_preferences.ageEnd,
+                                            UserProfile.age >= user_preferences.ageStart,
+                                            UserProfile.gender == user_preferences.gender,
+                                            UserProfile.id != current_user.get_id()).all()
         for profile in profiles:
             for a in admin:
                 if profile.id == a.id:
                     profiles.remove(profile)
     else:
-        profiles = UserProfile.query.filter(UserProfile.id != current_user.get_id(), 
-            UserProfile.id != (User.admin == 1)).all()
-        
+        profiles = UserProfile.query.filter(UserProfile.id != current_user.get_id(),
+                                            UserProfile.id != (User.admin == 1)).all()
+
     return jsonify({
         "requested": datetime.datetime.now(),
         "profiles": [profile.serialize() for profile in profiles]
     })
 
+
 @app.get("/api/v1/profiles/<int:user_id>")
-def get_other_profile(user_id): # Rename eventually
+def get_other_profile(user_id):  # Rename eventually
     profile = UserProfile.query.get(user_id)
     return jsonify({
         "requested": datetime.datetime.now(),
         "profile": profile.profile_to_json()
     })
 
-@app.get('/chat/')
+# connect user to chat with other user
+
+
+@app.get('/chat/<int:other_user_id>/')
 @login_required
-def get_chat_page():
+def get_chat_page(other_user_id):
     # return render_template('chat.html', room = session['room'])
-    other_user_id = request.args.get("user")
     other_user = User.query.filter_by(id=other_user_id).first()
     if(other_user is not None and other_user.id != current_user.id):
         print('connected to chat')
-        session['room'] = (current_user.id * 17) + (other_user.id * 17) + (current_user.id * 23) + (other_user.id * 23)
-        return render_template('chat.html', user = current_user, other_user = other_user)
+
+        # get room for both users
+        session['room'] = (current_user.id * 17) + (other_user.id * 17) + \
+            (current_user.id * 23) + (other_user.id * 23)
+
+        logs = ChatLogs.query.filter_by(room=session['room']).all()
+
+        senders = list(map(lambda it: User.query.filter_by(
+            id=it.sender).first().email, logs))
+        messages = list(map(lambda it: f'{it.content}\n', logs))
+
+        chats = list(zip(senders, messages))
+
+        for x in chats:
+            print(x[0], x[1])
+
+
+        return render_template('chat.html', user=current_user, other_user=other_user, chats=chats)
     return redirect(url_for('index'))
+
+
+def show_logs(it):
+    pass
+
+# notify that other user is online
+
 
 @socketio.on('joined')
 def joined(message):
     print(f'{current_user.email} joined')
-    # """Sent by clients when they enter a room.
-    # A status message is broadcast to all people in the room."""
     room = session.get('room')
     join_room(room)
-    emit('status', {'msg': f'{current_user.email} has entered the room.'}, room=room)
-    # emit('status', {'msg': f'{session.get("name")} has entered the room.'}, broadcast=True)
+    # emit('status', {
+    #      'msg': f'{current_user.email} is online'}, room=room)
+
+# store and transmit message
 
 
 @socketio.on('text')
 def text(message):
-    print(message)
-    # Sent by a client when the user entered a new message.
-    # The message is sent to all people in the room.
     room = session.get('room')
-    emit('message', {'msg': f'{current_user.email} : {message["msg"]}'}, room=room)
-    # emit('message', {'msg': f'{session.get("name")} : {message["msg"]}'}, broadcast=True)
+    print(f'{message["sent"]} said {message["msg"]} to {message["to"]}')
+
+    log = ChatLogs(time=datetime.datetime.now(), room=room,
+                   sender=message["sent"], recipient=message["to"], content=message["msg"])
+    db.session.add(log)
+    db.session.commit()
+
+    emit('message', {
+         'msg': f'{current_user.email} : {message["msg"]}'}, room=room)
 
 
-
+# run application
 if __name__ == '__main__':
     socketio.run(app, debug=True)
