@@ -153,6 +153,11 @@
         <input class='btn btn-crimson ms-3' id="submit" name="submit" type="submit" value="Create profile">
         {% endif %}
 
+        {% if preferences.ageStart and preferences.ageEnd and preferences.gender %}
+        <a class="btn btn-dark ms-3" href="{{ url_for('get_preferences_update') }}"> Update Preferences </a>
+        {% else %}
+        <a class="btn btn-dark ms-3" href="{{ url_for('get_preferences') }}"> Create Preferences </a>
+        {% endif %}
 
         {%elif (update == True) %}
 
