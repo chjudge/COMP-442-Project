@@ -184,7 +184,7 @@ def post_login():
         exclude = r'[\'\[\]]'
         for field, error in l_form.errors.items():
             print(f"{field}: {str(error)}")
-            flash(f"{re.sub(exclude, '', str(error))}")
+            flash(f"{field}: {re.sub(exclude, '', str(error))}")
         return redirect(url_for('get_login'))
 
 # logout user account
@@ -266,8 +266,10 @@ def post_profile():
         print(p_form.lname.data)
         print(p_form.gender.data)
         print(p_form.bio.data)
+        exclude = r'[\'\[\]]'
         for field, error in p_form.errors.items():
-            print(f"{field}: {error}")
+            print(f"{field}: {str(error)}")
+            flash(f"{re.sub(exclude, '', str(error))}")
     return redirect(url_for('get_profile'))
 
 # show admin only page, view and remove users
