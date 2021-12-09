@@ -74,6 +74,16 @@ transform: scale(1.01);
     background-color: rgb(199, 199, 199) !important;
 }
 
+.profile-page-pfp {
+    max-height: 100px;
+    max-width: 100px;
+}
+
+.profile-page-div {
+    max-width: 100px;
+    max-width: 100px;
+}
+
 button {
     justify-content: center;
     background-color: crimson !important;
@@ -114,4 +124,22 @@ footer{
     border: 1px solid #999;
     width: 60%;
     background-color: white;
+}
+
+#pfp {
+    text-align: center !important;
+    width: 175px;
+    height: 130px;
+}
+
+#pfp-div {
+    text-align: center;
+    margin-top: 10px;
+}
+
+#current-profile-content {
+    text-align: center;
+    overflow-y: scroll;
+    border-radius: 10px;
+    /* vertical-align: bottom; fix this pls */
 }
