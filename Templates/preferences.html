@@ -64,98 +64,31 @@
       </div>
       </div>
     </nav>
-    <div class="toast-container d-flex flex-column align-items-center w-100">
-      {% for message in get_flashed_messages() %}
-      <div class="toast" role="alert" data-bs-autohide="false" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-          <strong class="me-auto">Logout</strong>
-          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body">
-          {{message}}
-        </div>
-      </div>
-      {% endfor %}
-    </div>
   </header>
   <main>
-    <div class="message">
-      {% if profile.fname != None and profile.lname != None %}
-      <h3>Welcome {{profile.fname}} {{profile.lname}}!</h3>
-      {% else %}
-      <h3> Welcome! To complete account setup, please fill out all fields below. </h3>
-      {% endif %}
-      <h3>
-        {% if user.admin == True %}
-        You are an admin
-        {% endif %}
-      </h3>
-    </div>
-
-    <div class="container">
+     <div class="container">
       <form action="" class="form" method="post" enctype="multipart/form-data">
         {% if (update == False) %}
         {{form.hidden_tag()}}
+
         <h5>Email: {{user.email}}</h5>
-        {% if profile.fname != None %}
-        <h5>First Name: {{profile.fname}}</h5>
-        {% else %}
-        {{ form.fname(class='form-control', placeholder='First name') }}
-        {% endif %}
 
-        {% if profile.lname != None %}
-        <h5>Last Name: {{profile.lname}}</h5>
-        {% else %}
-        {{ form.lname(class='form-control', placeholder='Last name') }}
-        {% endif %}
-
-        {% if profile.age != None %}
-        <h5>Age: {{profile.age}}</h5>
-        {% else %}
-        {{ form.age(class='form-control', placeholder='Age') }}
-        {% endif %}
-
-        {% if profile.gender != None %}
-        <h5>Gender: {{profile.gender}}</h5>
+        {% if preferences.gender != None %}
+        <h5>Gender Preference: {{preferences.gender}}</h5>
         {% else %}
         {{ form.gender(class='form-control') }}
         {% endif %}
 
-        {% if profile.bio != None %}
-        <h5>Bio: {{profile.bio}}</h5>
+        {% if preferences.ageStart != None || preferences.ageEnd != None %}
+        <h5>Age Preference: {{preferences.ageStart}} - {{preferences.ageEnd}}</h5>
         {% else %}
-        {{ form.bio(class='form-control', placeholder='Create your bio') }}
-        {%endif%}
-
-        <!-- {% if profile.bio != None %}
-        <h5>Bio: {{profile.bio}}</h5>
-        {% else %}
-        {{ form.bio(class='form-control', placeholder='Create your bio') }}
-        {%endif%}
-
-        {% if profile.bio != None %}
-        <h5>Bio: {{profile.bio}}</h5>
-        {% else %}
-        {{ form.bio(class='form-control', placeholder='Create your bio') }}
-        {%endif%} -->
-
-        {% if profile.picture != None %}
-        <div class="profile-page-pfp-div">
-          <h5>Profile Picture: <br> <img src="{{profile.picture}}" class="profile-page-pfp"></h5>
-        </div>
-        {% else %}
-        {{ form.picture(class='form-control', placeholder='Profile Picture') }}
-        {%endif%}
-
-        <br>
-        {%if (profile.fname)%}
-        <a class="btn btn-dark ms-3" href="{{ url_for('update_profile') }}"> Update Profile </a>
-        {% else %} 
-        <input class='btn btn-crimson ms-3' id="submit" name="submit" type="submit" value="Create profile">
+        {{ form.age(class='form-control', placeholder='Age Preference') }}
         {% endif %}
 
+        <!-- <br>
+        <a class="btn btn-dark ms-3" href="{{ url_for('update_profile') }}"> Update Profile </a> -->
 
-        {%elif (update == True) %}
+        {% elif (update == True) %}
 
         {{ form.hidden_tag()}}
         {{ form.fname.label }}
@@ -174,7 +107,7 @@
         <br>
         <input class='btn btn-dark ms-3' id="submit" name="submit" type="submit" value="Update profile">
       </form>
-      <!-- {% else %}
+      {% else %}
       <div class="form" id="display">
         <h5>Email: {{user.email}}</h5>
         <h5>First Name: {{profile.fname}}</h5>
@@ -182,7 +115,6 @@
         <h5>Age: {{profile.age}}</h5>
         <h5>Gender: {{profile.gender}}</h5>
         <h5>Bio: {{profile.bio}}</h5>
-
         <h5>Profile Picture:</h5>
         <img src="{{profile.picture}}">
       </div>
@@ -197,6 +129,6 @@
     {% endif %}
   </footer>
 
-  <script src="/static/scripts/toast.js"></script>
 </body>
+
 </html>

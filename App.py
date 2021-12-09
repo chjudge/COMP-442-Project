@@ -1,6 +1,6 @@
 from werkzeug.datastructures import MultiDict
 from werkzeug.utils import secure_filename
-from forms import ProfileForm, RegisterForm, LoginForm
+from forms import ProfileForm, RegisterForm, LoginForm, PreferencesForm
 from hasher import Hasher
 import os, sys, datetime, re
 from flask import Flask, render_template, url_for, redirect, request, session, flash, jsonify
@@ -106,7 +106,14 @@ class UserProfile(db.Model):
             "dislikes": self.dislikes
         }
 
-# db.drop_all() # (K) Added this to fix querying issues. Use it as needed
+class UserPreferences(db.Model):
+    __tablename__ = "user_preferences"
+    id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key = True, nullable = False)
+    gender = db.Column(db.Enum('Male', 'Female'), nullable = True)
+    ageStart = db.Column(db.Integer, nullable = True)
+    ageEnd = db.Column(db.Integer, nullable = True)
+
+db.drop_all() # (K) Added this to fix querying issues. Use it as needed
 db.create_all()
 
 # show user registration form
@@ -260,6 +267,8 @@ def post_profile():
         user_profile.picture = f"/static/profile_pictures/{filename}"
 
         db.session.commit()
+
+        return redirect(url_for("get_preferences"))
     else:
         print('failure')
         print(p_form.fname.data)
@@ -269,6 +278,19 @@ def post_profile():
         for field, error in p_form.errors.items():
             print(f"{field}: {error}")
     return redirect(url_for('get_profile'))
+
+@app.get("/profile/preferences/")
+@login_required
+def get_preferences():
+    form = PreferencesForm()
+    preferences = UserPreferences.query.filter_by(id=current_user.get_id()).first()
+    return render_template('profile.html', user=current_user, preferences = preferences, form=form, update = False)
+
+@app.post("/profile/preferences/")
+def post_preferences():
+    form = PreferencesForm()
+    if form.validate():
+        pass
 
 # show admin only page, view and remove users
 @app.get('/admin/')

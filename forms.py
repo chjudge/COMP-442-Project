@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed, FileRequired
 from wtforms.fields import PasswordField, SubmitField, TextAreaField
 from wtforms.fields import SelectField, StringField
-from wtforms.fields.html5 import EmailField, IntegerField
+from wtforms.fields.html5 import EmailField, IntegerField, IntegerRangeField
 from wtforms.fields.simple import FileField
 from wtforms.validators import InputRequired, Email, EqualTo, Length, NumberRange
 
@@ -20,9 +20,13 @@ class ProfileForm(FlaskForm):
     age = IntegerField("Age: ", validators=[InputRequired(), NumberRange(min=0, max=120, message=None)])
     gender = SelectField("Gender: ", choices=["Male", "Female"])
     bio = TextAreaField("Bio: ", validators=[InputRequired()])
-    picture = FileField("Profile Picture: ", validators=[FileRequired(), FileAllowed(["jpg", "png"], message="Images only")])
+    # add likes and dislikes in whatever form here
+    picture = FileField("Profile Picture: ", validators=[FileRequired(), FileAllowed(["jpg", "png"], message=".jpg and .png file types")])
     submit = SubmitField("Update profile")
 
+class PreferencesForm(FlaskForm):
+    age = IntegerRangeField("Age: ", validators=[InputRequired(), NumberRange(min=18, max=120)])
+    gender = SelectField("Gender: ", choices=["Male", "Female"])
 class LoginForm(FlaskForm):
     email = EmailField("Email: ", validators=[InputRequired(), Email('Email must be in valid format')])
     password = PasswordField("Password: ", 

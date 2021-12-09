@@ -126,7 +126,6 @@ footer{
     background-color: white;
 }
 
-<<<<<<< HEAD
 #pfp {
     text-align: center !important;
     width: 175px;
@@ -143,9 +142,9 @@ footer{
     overflow-y: scroll;
     border-radius: 10px;
     /* vertical-align: bottom; fix this pls */
-=======
+}
+
 .btn-crimson {
     background-color: crimson;
     color: white;
->>>>>>> b7d59b6034bd0ccb75dc2534934df61911ca563b
 }
