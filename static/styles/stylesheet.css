@@ -84,6 +84,17 @@ transform: scale(1.01);
     max-width: 100px;
 }
 
+/* .ratio {
+    width: 65%;
+    align-content: center !important;
+    text-align: center;
+}
+
+.video {
+    display: block !important;
+    margin: auto;
+} */
+
 button {
     justify-content: center;
     background-color: crimson !important;

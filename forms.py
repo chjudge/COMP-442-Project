@@ -25,8 +25,10 @@ class ProfileForm(FlaskForm):
     submit = SubmitField("Update profile")
 
 class PreferencesForm(FlaskForm):
-    age = IntegerRangeField("Age: ", validators=[InputRequired(), NumberRange(min=18, max=120)])
+    ageStart = IntegerField("Minimum Age: ", validators=[InputRequired(), NumberRange(min=18, max=120)])
+    ageEnd = IntegerField("Maximum Age: ", validators=[InputRequired(), NumberRange(min=18, max=120)])
     gender = SelectField("Gender: ", choices=["Male", "Female"])
+    submit = SubmitField("Submit Preferences")
 class LoginForm(FlaskForm):
     email = EmailField("Email: ", validators=[InputRequired(), Email('Email must be in valid format')])
     password = PasswordField("Password: ", 

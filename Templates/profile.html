@@ -148,11 +148,16 @@
 
         <br>
         {%if (profile.fname)%}
-        <a class="btn btn-dark ms-3" href="{{ url_for('update_profile') }}"> Update Profile </a>
+        <a class="btn btn-dark ms-3" href="{{ url_for('get_update_profile') }}"> Update Profile </a>
         {% else %} 
-        <input class='btn btn-crimson ms-3' id="submit" name="submit" type="submit" value="Create profile">
+        <input class='btn btn-crimson ms-3' id="submit" name="submit" type="submit" value="Add Preferences >">
         {% endif %}
 
+        {% if preferences.ageStart and preferences.ageEnd and preferences.gender and profile.fname%}
+        <a class="btn btn-dark ms-3" href="{{ url_for('get_preferences_update') }}"> Update Preferences </a>
+        {% elif profile.fname%}
+        <a class="btn btn-dark ms-3" href="{{ url_for('get_preferences') }}"> Create Preferences </a>
+        {% endif %}
 
         {%elif (update == True) %}
 

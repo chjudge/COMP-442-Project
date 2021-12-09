@@ -70,6 +70,11 @@ class User(UserMixin, db.Model):
     def verify_password(self, pwd):
         return pwd_hasher.check(pwd, self.password_hash)
 
+    # def __str__(self):
+    #     return f"User(id={self.id})"
+    # def __repr__(self):
+    #     return str(self)
+
 # store data for users profile information
 class UserProfile(db.Model):
     __tablename__ = 'user_profiles'
@@ -88,7 +93,7 @@ class UserProfile(db.Model):
     def __repr__(self):
         return f"UserProfile(id={self.id}, fname={self.fname}, lname={self.lname})"
 
-    # (K) I know he did an example on this is class 11/17. Once I get that code, I may change this
+    # (K) I know he did an example on this is class 11/17. Once I get that code, I may change this (nah)
     def serialize(self):
         return {
             "id": self.id,
@@ -159,8 +164,10 @@ def post_register():
             db.session.add(user_profile)
             db.session.commit()
 
-            # (K) trying something
-            # user = User.query.filter_by(email=r_form.email.data).first()
+            user_preferences = UserPreferences(id=User.query.filter_by(email=r_form.email.data).first().id)
+            db.session.add(user_preferences)
+            db.session.commit()
+
             login_user(user) 
 
             return redirect(url_for('get_profile'))
@@ -220,43 +227,60 @@ def get_profile():
     p_form = ProfileForm()
     # pass through the profile of the current user
     user_profile = UserProfile.query.filter_by(id=current_user.get_id()).first()
-    return render_template('profile.html', user=current_user, profile=user_profile, form=p_form, update = False)
+    user_preferences = UserPreferences.query.filter_by(id=current_user.get_id()).first()
+    return render_template('profile.html', user=current_user, profile=user_profile, preferences=user_preferences, form=p_form, update = False)
 
 # allow user to update
 @app.get('/profile/update/')
 @login_required
-def update_profile():
+def get_update_profile():
     user_profile = UserProfile.query.filter_by(id=current_user.get_id()).first()
-    p_form = ProfileForm(formdata=MultiDict({"fname": user_profile.fname, "lname": user_profile.lname, 
-        "gender": user_profile.gender, "bio": user_profile.bio}))
+    p_form = ProfileForm(formdata=MultiDict({"fname": user_profile.fname, "lname": user_profile.lname, "age": user_profile.age,
+        "gender": user_profile.gender, "bio": user_profile.bio, "picture": user_profile.picture}))
+    print(user_profile.picture)
     return render_template('profile.html', user=current_user, profile=user_profile, form=p_form, update = True)
 
-# @app.post('/profile/update/')
-# @login_required
-# def post_update_profile():
-#     p_form = ProfileForm()
-#     # update bio
-#     if p_form.validate():
-#         user_profile = UserProfile.query.filter_by(id=current_user.get_id()).first()
-#         user_profile.fname = p_form.fname.data
-#         user_profile.lname = p_form.lname.data
-#         user_profile.gender = p_form.gender.data
-#         user_profile.bio = p_form.bio.data
-        
-#         db.session.commit()
-#     else:
-#         print('failure')
-#         print(p_form.fname.data)
-#         print(p_form.lname.data)
-#         print(p_form.gender.data)
-#         print(p_form.bio.data)
-#         for field, error in p_form.errors.items():
-#             print(f"{field}: {error}")
-#     return redirect(url_for('get_profile'))
-# facilitate updates to user profile information
-
-@app.post('/profile/')
 @app.post('/profile/update/')
+@login_required
+def post_update_profile():
+    p_form = ProfileForm()
+
+    if p_form.validate():
+        user_profile = UserProfile.query.filter_by(id=current_user.get_id()).first()
+        user_profile.fname = p_form.fname.data
+        user_profile.lname = p_form.lname.data
+        user_profile.age = p_form.age.data
+        user_profile.gender = p_form.gender.data
+        user_profile.bio = p_form.bio.data
+
+        # upload profile picture
+        f = p_form.picture.data
+        filename = secure_filename(f.filename)
+        f.save(os.path.join(
+            "static", "profile_pictures", filename
+        ))
+        # save profile picture to db
+        user_profile.picture = f"/static/profile_pictures/{filename}"
+
+        db.session.commit()
+
+        # redirect back to profile page
+        return redirect(url_for("get_profile"))
+
+    else:
+        print('failure')
+        print(p_form.fname.data)
+        print(p_form.lname.data)
+        print(p_form.gender.data)
+        print(p_form.bio.data)
+        exclude = r'[\'\[\]]'
+        for field, error in p_form.errors.items():
+            print(f"{field}: {str(error)}")
+            flash(f"{re.sub(exclude, '', str(error))}")
+    return redirect(url_for('get_update_profile'))
+
+# post for initially creating profile
+@app.post('/profile/')
 @login_required
 def post_profile():
     p_form = ProfileForm()
@@ -279,7 +303,9 @@ def post_profile():
 
         db.session.commit()
 
+        # redirect directly to preferences
         return redirect(url_for("get_preferences"))
+
     else:
         print('failure')
         print(p_form.fname.data)
@@ -297,13 +323,51 @@ def post_profile():
 def get_preferences():
     form = PreferencesForm()
     preferences = UserPreferences.query.filter_by(id=current_user.get_id()).first()
-    return render_template('profile.html', user=current_user, preferences = preferences, form=form, update = False)
+    return render_template('preferences.html', user=current_user, preferences = preferences, form=form, update = False)
 
 @app.post("/profile/preferences/")
 def post_preferences():
     form = PreferencesForm()
     if form.validate():
-        pass
+        preferences = UserPreferences.query.filter_by(id=current_user.get_id()).first()
+        preferences.gender = form.gender.data
+        preferences.ageStart = form.ageStart.data
+        preferences.ageEnd = form.ageEnd.data
+
+        db.session.commit()
+    else:
+        exclude = r'[\'\[\]]'
+        for field, error in form.errors.items():
+            print(f"{field}: {str(error)}")
+            flash(f"{re.sub(exclude, '', str(error))}")
+        return redirect(url_for('get_preferences'))
+    return redirect(url_for("get_profile"))
+
+@app.get("/profile/preferences/update/")
+@login_required
+def get_preferences_update():
+    user_profile = UserPreferences.query.filter_by(id=current_user.get_id()).first()
+    form = PreferencesForm(formdata=MultiDict({"ageStart": user_profile.ageStart, "ageEnd": user_profile.ageEnd, "gender": user_profile.gender}))
+    return render_template('preferences.html', user=current_user, profile=user_profile, form=form, update = True)
+
+@app.post("/profile/preferences/update/")
+@login_required
+def post_update_preferences():
+    form = PreferencesForm()
+    if form.validate():
+        preferences = UserPreferences.query.filter_by(id=current_user.get_id()).first()
+        preferences.gender = form.gender.data
+        preferences.ageStart = form.ageStart.data
+        preferences.ageEnd = form.ageEnd.data
+
+        db.session.commit()
+    else:
+        exclude = r'[\'\[\]]'
+        for field, error in form.errors.items():
+            print(f"{field}: {str(error)}")
+            flash(f"{re.sub(exclude, '', str(error))}")
+        return redirect(url_for('get_preferences'))
+    return redirect(url_for("get_profile"))    
 
 # show admin only page, view and remove users
 @app.get('/admin/')
@@ -366,7 +430,22 @@ def get_about_page():
 
 @app.get("/api/v1/profiles/")
 def get_profiles():
-    profiles = UserProfile.query.all()
+    user_preferences = UserPreferences.query.filter_by(id=current_user.get_id()).first() 
+
+    if user_preferences.ageStart and user_preferences.ageEnd and user_preferences.gender:
+        admin = User.query.filter(User.admin == True).all()
+        profiles = UserProfile.query.filter(UserProfile.age <= user_preferences.ageEnd, 
+            UserProfile.age >= user_preferences.ageStart, 
+            UserProfile.gender == user_preferences.gender,
+            UserProfile.id != current_user.get_id()).all()
+        for profile in profiles:
+            for a in admin:
+                if profile.id == a.id:
+                    profiles.remove(profile)
+    else:
+        profiles = UserProfile.query.filter(UserProfile.id != current_user.get_id(), 
+            UserProfile.id != (User.admin == 1)).all()
+        
     return jsonify({
         "requested": datetime.datetime.now(),
         "profiles": [profile.serialize() for profile in profiles]
