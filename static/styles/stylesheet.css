@@ -92,17 +92,6 @@ transform: scale(1.01);
     max-width: 100px;
 }
 
-/* .ratio {
-    width: 65%;
-    align-content: center !important;
-    text-align: center;
-}
-
-.video {
-    display: block !important;
-    margin: auto;
-} */
-
 button {
     justify-content: center;
     background-color: crimson !important;
@@ -113,32 +102,12 @@ footer{
     border-top:  gray thin solid;
 }
 
-/* .message {
-    background-color: crimson;
-    margin:auto;
-    margin-bottom: 2em;
-    margin-top:2em;
-    width: 70%;
-    padding-bottom: .5em;
-    padding-top: .5em;
-    max-width: 30em;
-    text-align: center;
-} */
-
-
-/* #pfp {
-    text-align: center !important;
-    width: 175px;
-    height: 130px;
-}
-
-#pfp-div {
-    text-align: center;
-    margin-top: 10px;
-} */
-
 .btn-crimson {
     background-color: crimson;
     color: white;
     margin-bottom: 1em;
+}
+
+h1{
+    margin: .5em
 }

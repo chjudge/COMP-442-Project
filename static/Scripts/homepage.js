@@ -186,12 +186,14 @@ async function viewProfile(id) {
 
             const bioTitle = document.createElement("h3");
             bioTitle.classList.add("current-profile-titles");
-            bioTitle.innerText = "Bio";
+            bioTitle.innerText = "Bio:";
+            content.appendChild(bioTitle);
+
             const bio = document.createElement("p");
             bio.classList.add("current-profile-content");
             bio.innerText = data.profile.bio;
-            bioTitle.appendChild(bio);
-            insertAfter(bioTitle, nameAgeGender);
+            content.appendChild(bio);
+            // insertAfter(bioTitle, nameAgeGender);
 
             // const interestsTitle = document.createElement("h3");
             // interestsTitle.classList.add("current-profile-titles");
@@ -217,7 +219,7 @@ async function viewProfile(id) {
             chatButton.classList.add("ms-3");
             chatButton.href = `/chat/${id}`;
             chatButton.innerText = "Chat Now";
-            insertAfter(chatButton, bioTitle);
+            insertAfter(chatButton, bio);
 
             document.body.style.overflow = "hidden";
             profile.style.display = "block";

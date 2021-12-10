@@ -62,3 +62,16 @@ body {
     border-radius: 10px;
     /* vertical-align: bottom; fix this pls */
 }
+
+.current-profile-titles {
+    text-align: left;
+    margin-left: 1em;
+
+}
+.current-profile-content {
+    text-align: left;
+    margin-left: 2em;
+    margin-right: 2em;
+}
+
+

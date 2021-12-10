@@ -67,11 +67,9 @@
   </header>
   <main>
     <!-- show that user is logged in -->
-    {% if user.is_authenticated %}
-    <h1>Logged in as {{user.email}}</h1>
-    {% else %}
+
     <h1> Start Mingling! </h1>
-    {% endif %}
+
 
     <!-- Div that homepage.js will latch onto -->
     <div id="all-profiles"></div>
