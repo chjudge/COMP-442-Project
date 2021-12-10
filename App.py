@@ -454,17 +454,14 @@ def post_admin_page():
 def index():
     return render_template("welcome.html", user=current_user)
 
-
 @app.get("/home/")
 @login_required
 def get_homepage():
     return render_template("homepage.html", user=current_user)
 
-
-@app.get("/about/")
-def get_about_page():
-    pass
-
+@app.get("/contact/")
+def get_contact_page():
+    return render_template("contact.html", user=current_user)
 
 @app.get("/api/v1/profiles/")
 def get_profiles():
