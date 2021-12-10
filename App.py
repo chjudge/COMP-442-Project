@@ -506,7 +506,6 @@ def get_other_profile(user_id):  # Rename eventually
 @app.get('/chat/<int:other_user_id>/')
 @login_required
 def get_chat_page(other_user_id):
-    # return render_template('chat.html', room = session['room'])
     other_user = UserProfile.query.filter_by(id=other_user_id).first()
     if(other_user is not None and other_user.id != current_user.id):
         print('connected to chat')
@@ -523,10 +522,6 @@ def get_chat_page(other_user_id):
 
         chats = list(zip(senders, messages))
 
-        for x in chats:
-            print(x[0], x[1])
-
-
         return render_template('chat.html', user=current_user, other_user=other_user, chats=chats)
     return redirect(url_for('index'))
 
@@ -539,9 +534,6 @@ def get_chat_view():
         names[user.id] = user.fname + " " + user.lname
     
     return render_template("chat_view.html", chats = chats, user = current_user, names = names)
-
-def show_logs(it):
-    pass
 
 # notify that other user is online
 @socketio.on('joined')
@@ -567,7 +559,8 @@ def text(message):
     db.session.commit()
 
     emit('message', {
-         'msg': f'{user_profile.fname} : {message["msg"]}'}, room=room)
+         'msg': f'{user_profile.fname} : {message["msg"]}',
+         'sender' : current_user.get_id() }, room=room)
 
 
 # run application
