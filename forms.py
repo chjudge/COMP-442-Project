@@ -17,7 +17,7 @@ class RegisterForm(FlaskForm):
 class ProfileForm(FlaskForm):
     fname = StringField("First Name: ", validators=[InputRequired()])
     lname = StringField("Last Name: ", validators=[InputRequired()])
-    age = IntegerField("Age: ", validators=[InputRequired(), NumberRange(min=0, max=120, message=None)])
+    age = IntegerField("Age: ", validators=[InputRequired(), NumberRange(min=18, max=120, message="Minimum age must be over 18")])
     gender = SelectField("Gender: ", choices=["Male", "Female"])
     bio = TextAreaField("Bio: ", validators=[InputRequired()])
     # add likes and dislikes in whatever form here
@@ -25,8 +25,8 @@ class ProfileForm(FlaskForm):
     submit = SubmitField("Update profile")
 
 class PreferencesForm(FlaskForm):
-    ageStart = IntegerField("Minimum Age: ", validators=[InputRequired(), NumberRange(min=18, max=120)])
-    ageEnd = IntegerField("Maximum Age: ", validators=[InputRequired(), NumberRange(min=18, max=120)])
+    ageStart = IntegerField("Minimum Age: ", validators=[InputRequired(), NumberRange(min=18, max=120, message="Minimum age must be over 18")])
+    ageEnd = IntegerField("Maximum Age: ", validators=[InputRequired(), NumberRange(min=18, max=120, message="Minimum age must be over 18")])
     gender = SelectField("Gender: ", choices=["Male", "Female"])
     submit = SubmitField("Submit Preferences")
 class LoginForm(FlaskForm):

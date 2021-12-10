@@ -67,6 +67,19 @@
       </div>
       </div>
     </nav>
+    <div class="toast-container d-flex flex-column align-items-center w-100">
+      {% for message in get_flashed_messages() %}
+      <div class="toast" role="alert" data-bs-autohide="false" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <strong class="me-auto">Error</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+          {{message}}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
   </header>
   <main>
      <div class="container">
