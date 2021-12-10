@@ -14,6 +14,8 @@
 
   <!-- Custom CSS styles -->
   <link rel="stylesheet" href="/static/styles/stylesheet.css">
+  <link rel="stylesheet" href="/static/styles/chat.css">
+
 
 </head>
 
@@ -61,7 +63,8 @@
   </header>
 
   <h1 id="title">Chat with {{ other_user.fname }} {{ other_user.lname}}</h1>
-  <div id="chat" class="col-6 mh-100 overflow-auto py-2">
+  <!-- <div id="chat" class="col-6 mh-100 overflow-auto py-2"> -->
+  <div id="chat" class="col-12 overflow-auto py-2">
     {% for chat in chats %}
     <p>{{ chat[0] }} : {{chat[1]}}</p>
     {% endfor %}
@@ -99,6 +102,8 @@
         let text = document.createElement('p')
         text.textContent = data.msg
         chat.appendChild(text)
+        let textBox = document.querySelector('#chat')
+        textBox.scrollTop = textBox.scrollHeight;
         // document.querySelector('#chat').scrollTop = document.querySelector('#chat').scrollHeight;
       });
       let textBox = document.querySelector('#text')
@@ -111,6 +116,7 @@
           if (text != '') {
             console.log(text);
             socket.emit('text', { msg: text, sent: userID, to: otherUserID });
+            // textBox.scrollTop = textBox.scrollHeight;
           }
         }
       });
