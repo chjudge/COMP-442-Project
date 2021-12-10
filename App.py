@@ -126,7 +126,6 @@ class UserProfile(db.Model):
             # "dislikes": self.dislikes
         }
 
-
 class UserPreferences(db.Model):
     __tablename__ = "user_preferences"
     id = db.Column(db.Integer, db.ForeignKey("users.id"),
@@ -134,7 +133,6 @@ class UserPreferences(db.Model):
     gender = db.Column(db.Enum('Male', 'Female'), nullable=True)
     ageStart = db.Column(db.Integer, nullable=True)
     ageEnd = db.Column(db.Integer, nullable=True)
-
 
 class ChatLogs(db.Model):
     __tablename__ = 'chat_logs'
@@ -475,9 +473,9 @@ def get_profiles():
     if user_preferences.ageStart and user_preferences.ageEnd and user_preferences.gender:
         admin = User.query.filter(User.admin == True).all()
         profiles = UserProfile.query.filter(UserProfile.age <= user_preferences.ageEnd,
-                                            UserProfile.age >= user_preferences.ageStart,
-                                            UserProfile.gender == user_preferences.gender,
-                                            UserProfile.id != current_user.get_id()).all()
+            UserProfile.age >= user_preferences.ageStart,
+            UserProfile.gender == user_preferences.gender,
+            UserProfile.id != current_user.get_id()).all()
         for profile in profiles:
             for a in admin:
                 if profile.id == a.id:
@@ -508,7 +506,6 @@ def get_other_profile(user_id):  # Rename eventually
 @app.get('/chat/<int:other_user_id>/')
 @login_required
 def get_chat_page(other_user_id):
-    # return render_template('chat.html', room = session['room'])
     other_user = UserProfile.query.filter_by(id=other_user_id).first()
     if(other_user is not None and other_user.id != current_user.id):
         print('connected to chat')
@@ -525,19 +522,18 @@ def get_chat_page(other_user_id):
 
         chats = list(zip(senders, messages))
 
-        for x in chats:
-            print(x[0], x[1])
-
-
         return render_template('chat.html', user=current_user, other_user=other_user, chats=chats)
     return redirect(url_for('index'))
 
 @app.get("/chat/")
 def get_chat_view():
-    pass
-
-def show_logs(it):
-    pass
+    chats = ChatLogs.query.filter(ChatLogs.sender == current_user.get_id()).all()
+    all_users = UserProfile.query.all()
+    names = {}
+    for user in all_users:
+        names[user.id] = user.fname + " " + user.lname
+    
+    return render_template("chat_view.html", chats = chats, user = current_user, names = names)
 
 # notify that other user is online
 @socketio.on('joined')
@@ -563,7 +559,8 @@ def text(message):
     db.session.commit()
 
     emit('message', {
-         'msg': f'{user_profile.fname} : {message["msg"]}'}, room=room)
+         'msg': f'{user_profile.fname} : {message["msg"]}',
+         'sender' : current_user.get_id() }, room=room)
 
 
 # run application
