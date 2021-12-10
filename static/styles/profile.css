@@ -8,3 +8,14 @@
 .btn {
     margin-top: .5em;
 }
+
+.profile-page-pfp{
+    margin:auto;
+    max-width: 80%;
+    max-height: 15em;
+}
+
+.profile-page-pfp-div {
+    text-align: center;
+    align-items: center;
+}

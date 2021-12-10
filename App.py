@@ -276,13 +276,13 @@ def post_update_profile():
         user_profile.bio = p_form.bio.data
 
         # upload profile picture
-        f = p_form.picture.data
-        filename = secure_filename(f.filename)
-        f.save(os.path.join(
-            "static", "profile_pictures", filename
-        ))
-        # save profile picture to db
-        user_profile.picture = f"/static/profile_pictures/{filename}"
+        # f = p_form.picture.data
+        # filename = secure_filename(f.filename)
+        # f.save(os.path.join(
+        #     "static", "profile_pictures", filename
+        # ))
+        # # save profile picture to db
+        # user_profile.picture = f"/static/profile_pictures/{filename}"
 
         db.session.commit()
 
@@ -317,17 +317,24 @@ def post_profile():
         user_profile.bio = p_form.bio.data
 
         f = p_form.picture.data
-        filename = secure_filename(f.filename)
-        f.save(os.path.join(
-            "static", "profile_pictures", filename
-        ))
+        print(f)
 
-        user_profile.picture = f"/static/profile_pictures/{filename}"
+        if f:
+            filename = secure_filename(f.filename)
+            f.save(os.path.join(
+                "static", "profile_pictures", filename
+            ))
 
-        db.session.commit()
+            user_profile.picture = f"/static/profile_pictures/{filename}"
+        
 
-        # redirect directly to preferences
-        return redirect(url_for("get_preferences"))
+            db.session.commit()
+
+            # redirect directly to preferences
+            return redirect(url_for("get_preferences"))
+        else: 
+            flash("Profile picture required")
+            return redirect(url_for('get_profile'))
 
     else:
         print('failure')

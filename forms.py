@@ -21,7 +21,7 @@ class ProfileForm(FlaskForm):
     gender = SelectField("Gender: ", choices=["Male", "Female"])
     bio = TextAreaField("Bio: ", validators=[InputRequired()])
     # add likes and dislikes in whatever form here
-    picture = FileField("Profile Picture: ", validators=[FileRequired(), FileAllowed(["jpg", "png"], message=".jpg and .png file types")])
+    picture = FileField("Profile Picture: ", validators=[FileAllowed(["jpg", "png"], message=".jpg and .png file types")])
     submit = SubmitField("Update profile")
 
 class PreferencesForm(FlaskForm):
