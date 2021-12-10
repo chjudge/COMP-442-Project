@@ -9,6 +9,10 @@ main {
     padding-top: 1em;
 }
 
+.navbar {
+    background-color: rgb(255, 255, 255);
+}
+
 
 #back {
     color: crimson;

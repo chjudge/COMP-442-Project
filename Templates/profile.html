@@ -20,7 +20,7 @@
     crossorigin="anonymous"></script>
 
   <!-- Custom CSS styles -->
-  <link rel="stylesheet" href="/static/styles/welcome.css">
+  <link rel="stylesheet" href="/static/styles/profile.css">
 
   <!-- Custom CSS styles -->
   <link rel="stylesheet" href="/static/styles/stylesheet.css">
@@ -110,16 +110,15 @@
           </div>          
 
         {% elif (update == False) %}
-          <h5>First Name: {{profile.fname}}</h5>
-          <h5>Last Name: {{profile.lname}}</h5>
+          <h5> Name: {{profile.fname}} {{profile.lname}}</h5>
           <h5>Age: {{profile.age}}</h5>
           <h5>Gender: {{profile.gender}}</h5>
-          <h5>Bio: {{profile.bio}}</h5>
+          <h5>Bio:</h5> 
+          <p> {{profile.bio}} </p>
           <div class="profile-page-pfp-div">
             <h5>Profile Picture: <br> <img src="{{profile.picture}}" class="profile-page-pfp"></h5>
           </div>
 
-          <!--  -->
           <div id ='update_buttons'>
             <a class="btn btn-dark ms-3" href="{{ url_for('get_update_profile') }}"> Update Profile </a>
             <a class="btn btn-dark ms-3" href="{{ url_for('get_preferences_update') }}"> Update Preferences </a>
