@@ -23,6 +23,7 @@ p {
 
 .table {
     justify-content: center;
+    text-align: center;
 }
 table {
     margin: auto;
