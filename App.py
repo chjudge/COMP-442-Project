@@ -526,7 +526,7 @@ def get_chat_page(other_user_id):
 
 @app.get("/chat/")
 def get_chat_view():
-    chats = ChatLogs.query.filter(ChatLogs.sender == current_user.get_id()).all()
+    chats = ChatLogs.query.filter(ChatLogs.sender == current_user.get_id()).group_by(ChatLogs.recipient).all()
     all_users = UserProfile.query.all()
     names = {}
     for user in all_users:
