@@ -102,10 +102,10 @@
         let chat = document.querySelector('#chat')
         let text = document.createElement('p')
         text.textContent = data.msg
-        if (data['sender'] === userID) {
-          text.classList.add('reciever')
-        } else {
+        if (data['sender'] == userID) {
           text.classList.add('sender')
+        } else {
+          text.classList.add('reciever')
         }
         chat.appendChild(text)
         let textBox = document.querySelector('#chat')
