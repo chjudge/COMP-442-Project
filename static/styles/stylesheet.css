@@ -34,7 +34,7 @@ h1, h3 {
 
 }
 
-.form {
+.form, .table, #contact-info {
     margin:auto;
     width: 70%;
     max-width: 30em;
@@ -83,16 +83,6 @@ cursor: pointer;
     background-color: rgb(199, 199, 199) !important;
 }
 
-.profile-page-pfp {
-    max-height: 100px;
-    max-width: 100px;
-}
-
-.profile-page-div {
-    max-width: 100px;
-    max-width: 100px;
-}
-
 button {
     justify-content: center;
     background-color: crimson !important;
@@ -106,7 +96,8 @@ footer{
 .btn-crimson {
     background-color: crimson;
     color: white;
-    margin-bottom: 1em;
+    margin-bottom: .7em;
+    margin-top: .7em
 }
 
 h1{

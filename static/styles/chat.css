@@ -17,6 +17,15 @@ p {
     margin-left: 1em;
 }
 
-.receiver {
+.reciever {
     color:crimson;
+}
+
+.table {
+    justify-content: center;
+    text-align: center;
+}
+table {
+    margin: auto;
+    width: 65%;
 }

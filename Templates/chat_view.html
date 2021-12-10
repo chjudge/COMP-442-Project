@@ -21,6 +21,7 @@
 
   <!-- Custom CSS styles -->
   <link rel="stylesheet" href="/static/styles/stylesheet.css">
+  <link rel="stylesheet" href="/static/styles/chat.css">
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="/static/favicon/logo.png" type="image/png"/>
@@ -66,8 +67,8 @@
     </nav>
   </header>
   <main>
-    {% if chat %}
     <div class="table">
+      {% if chats %}
       <table>
         <tr>
           <th> Chat with </th>
@@ -76,14 +77,14 @@
         {% for chat in chats %}
           <tr>
             <td> {{names[chat.recipient]}} </td>
-            <td> <a class="btn btn-light ms-3" href="/chat/{{chat.recipient}}"> Chat </a> </td>
+            <td> <a class="btn btn-crimson ms-3" href="/chat/{{chat.recipient}}"> Chat </a> </td>
           </tr>
         {% endfor %}
       </table> 
+      {% else %}
+      <p>There are no chats to display.</p>
+      {% endif %}
     </div>
-    {% else %}
-    <p> There are no chats to display. </p>
-    {% endif %}
   </main>
 
 </body>
