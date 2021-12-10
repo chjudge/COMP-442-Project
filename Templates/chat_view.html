@@ -69,12 +69,12 @@
     <div class="table">
       <table>
         <tr>
-          <th> Chat Recepient </th>
+          <th> Chat with </th>
           <th> Enter Chat </th>
         </tr>
         {% for chat in chats %}
           <tr>
-            <td> Chat with {{names[chat.recipient]}} </td>
+            <td> {{names[chat.recipient]}} </td>
             <td> <a class="btn btn-light ms-3" href="/chat/{{chat.recipient}}"> Chat </a> </td>
           </tr>
         {% endfor %}
