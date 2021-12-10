@@ -443,8 +443,12 @@ def get_profiles():
                 if profile.id == a.id:
                     profiles.remove(profile)
     else:
-        profiles = UserProfile.query.filter(UserProfile.id != current_user.get_id(), 
-            UserProfile.id != (User.admin == 1)).all()
+        admin = User.query.filter(User.admin == True).all()
+        profiles = UserProfile.query.filter(UserProfile.id != current_user.get_id()).all()
+        for profile in profiles:
+            for a in admin:
+                if profile.id == a.id:
+                    profiles.remove(profile)
         
     return jsonify({
         "requested": datetime.datetime.now(),
