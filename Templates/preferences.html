@@ -91,7 +91,7 @@
         {{ form.ageEnd(class='form-control', placeholder='Maximum Age') }}
         {% endif %}
 
-        {{form.submit()}}
+        <input class='btn btn-crimson ms-3' id="submit" name="submit" type="submit" value="Create Profile">
 
         {% elif (update == True) %}
 
@@ -103,21 +103,8 @@
         {{ form.gender.label }}
         {{ form.gender(class='form-control', placeholder='Gender') }}
 
-        {{form.submit()}}
-        <!-- <br>
-        <input class='btn btn-dark ms-3' id="submit" name="submit" type="submit" value="Update profile"> -->
+        <input class='btn btn-dark ms-3' id="submit" name="submit" type="submit" value="Update">
       </form>
-      <!-- {% else %}
-      <div class="form" id="display">
-        <h5>Email: {{user.email}}</h5>
-        <h5>First Name: {{profile.fname}}</h5>
-        <h5>Last Name: {{profile.lname}}</h5>
-        <h5>Age: {{profile.age}}</h5>
-        <h5>Gender: {{profile.gender}}</h5>
-        <h5>Bio: {{profile.bio}}</h5>
-        <h5>Profile Picture:</h5>
-        <img src="{{profile.picture}}">
-      </div>-->
       {% endif %} 
     </div>
   </main>
