@@ -1,4 +1,3 @@
-from operator import or_
 from werkzeug.datastructures import MultiDict
 from werkzeug.utils import secure_filename
 from forms import ProfileForm, RegisterForm, LoginForm, PreferencesForm
@@ -454,17 +453,14 @@ def post_admin_page():
 def index():
     return render_template("welcome.html", user=current_user)
 
-
 @app.get("/home/")
 @login_required
 def get_homepage():
     return render_template("homepage.html", user=current_user)
 
-
-@app.get("/about/")
-def get_about_page():
-    pass
-
+@app.get("/contact/")
+def get_contact_page():
+    return render_template("contact.html", user=current_user)
 
 @app.get("/api/v1/profiles/")
 def get_profiles():
@@ -517,23 +513,25 @@ def get_chat_page(other_user_id):
 
         logs = ChatLogs.query.filter_by(room=session['room']).all()
 
-        senders = list(map(lambda it: User.query.filter_by(
+        emails = list(map(lambda it: User.query.filter_by(
             id=it.sender).first().email, logs))
+        names = list(map(lambda it: UserProfile.query.filter_by(
+            id=it.sender).first().fname, logs))
         messages = list(map(lambda it: f'{it.content}\n', logs))
 
-        chats = list(zip(senders, messages))
+        chats = list(zip(emails, names, messages))
 
         return render_template('chat.html', user=current_user, other_user=other_user, chats=chats)
     return redirect(url_for('index'))
 
 @app.get("/chat/")
 def get_chat_view():
-    # inbox = ChatLogs.query.filter(ChatLogs.recipient == current_user.get_id()).group_by(ChatLogs.sender).all()
-    chats = ChatLogs.query.filter(ChatLogs.sender == current_user.get_id()).group_by(ChatLogs.recipient).all()
+    chats = ChatLogs.query.filter(ChatLogs.sender == current_user.get_id()).all()
     all_users = UserProfile.query.all()
     names = {}
     for user in all_users:
         names[user.id] = user.fname + " " + user.lname
+    
     return render_template("chat_view.html", chats = chats, user = current_user, names = names)
 
 # notify that other user is online

@@ -48,10 +48,7 @@
               <a class="nav-link active" href="{{ url_for('get_chat_view') }}"> Chat </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link disabled" href="{{ url_for('get_about_page') }}"> About Us </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link disabled" href="#">Contact Us</a>
+              <a class="nav-link active" href="{{ url_for('get_contact_page') }}">Contact Us</a>
             </li>
           </ul>
           {% if user.is_authenticated %}

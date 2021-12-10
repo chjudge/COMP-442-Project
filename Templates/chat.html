@@ -41,10 +41,7 @@
               <a class="nav-link active" href="{{ url_for('get_chat_view') }}"> Chat </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link disabled" href="{{ url_for('get_about_page') }}"> About Us </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link disabled" href="#">Contact Us</a>
+              <a class="nav-link active" href="{{ url_for('get_contact_page') }}">Contact Us</a>
             </li>
           </ul>
           {% if user.is_authenticated %}
@@ -67,9 +64,9 @@
   <div id="chat" class="col-12 overflow-auto py-2">
     {% for chat in chats %}
     {% if user.email == chat[0] %}
-    <p class="sender">{{ chat[0] }} : {{chat[1]}}</p>
+    <p class="sender">{{ chat[1] }} : {{chat[2]}}</p>
     {% else %}
-    <p class="reciever">{{ chat[0] }} : {{chat[1]}}</p>
+    <p class="reciever">{{ chat[1] }} : {{chat[2]}}</p>
     {% endif %}
     {% endfor %}
   </div>

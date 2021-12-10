@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
+  <title>Chat</title>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title> Grover Mingle </title>
 
   <!-- Bootstrap CSS v5.0.2 -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
@@ -20,7 +20,6 @@
     crossorigin="anonymous"></script>
 
   <!-- Custom CSS styles -->
-  <link rel="stylesheet" href="/static/styles/welcome.css">
   <link rel="stylesheet" href="/static/styles/stylesheet.css">
 </head>
 
@@ -62,34 +61,15 @@
       </div>
       </div>
     </nav>
-
-    <div class="toast-container d-flex flex-column align-items-center w-100">
-      {% for message in get_flashed_messages() %}
-      <div class="toast" role="alert" data-bs-autohide="false" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-          <strong class="me-auto">Logout</strong>
-          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body">
-          {{message}}
-        </div>
-      </div>
-      {% endfor %}
-    </div>
   </header>
   <main>
-    <div id="video-container" class="ratio ratio-16x9">
-      <iframe src="https://www.youtube.com/embed/ufTaAwUymkw?autoplay=1&mute=1&loop=1&playlist=ufTaAwUymkw" 
-      class="video" allowfullscreen></iframe>
-    </div>
-    <div id="blurb">
-      <h1 id="title">GROVER MINGLE</h1>
-      <p>Grover Mingle is a dating site for students at Grove City college looking to get dat ring by spring.</p>
-      <p>DISCLAIMER: This video was not produced as part of this project</p>
+    <div id="contact-info">
+      <h3> Contact us: </h3>
+      <p> Address: 100 Campus Drive, Grove City, PA 16127</p>
+      <p> Email: hambykr19@gcc.edu </p>
     </div>
   </main>
 
-  <script src="/static/scripts/toast.js" id="toast"></script>
 </body>
 
 </html>
