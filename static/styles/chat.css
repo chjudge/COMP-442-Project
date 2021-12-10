@@ -1,21 +1,22 @@
 #text {
-    width: 90%;
+    width: 95%;
     margin: 1em;
-    position:fixed
+    position:fixed;
+    bottom: 0;
 }
 
 #chat {
     overflow: none;
     position: relative;
     /* width: 100%; */
-    height: 60vh;
-    border: 1px solid #ccc;
+    height: 57vh;
+    border: 1px solid rgb(240, 240, 240);
 }
 
-.reciever {
-    text-align: right;
+p {
+    margin-left: 1em;
 }
 
-.sender {
+.receiver {
     color:crimson;
 }

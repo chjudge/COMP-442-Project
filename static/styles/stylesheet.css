@@ -57,6 +57,7 @@ h1, h3 {
 -ms-transform: scale(1.01); /* IE 9 */
 -webkit-transform: scale(1.01); /* Safari */
 transform: scale(1.01);
+cursor: pointer;
 }
 
 .preview {
