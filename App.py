@@ -530,7 +530,7 @@ def get_chat_view():
     all_users = UserProfile.query.all()
     names = {}
     for user in all_users:
-        names[user.id] = user.fname + " " + user.lname
+        names[user.id] = f'{user.fname} {user.lname}'
     
     return render_template("chat_view.html", chats = chats, user = current_user, names = names)
 
