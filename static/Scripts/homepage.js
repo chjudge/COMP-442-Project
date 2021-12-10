@@ -213,7 +213,7 @@ async function viewProfile(id) {
 
             const chatButton = document.createElement("a");
             chatButton.classList.add("btn");
-            chatButton.classList.add("btn-dark");
+            chatButton.classList.add("btn-crimson");
             chatButton.classList.add("ms-3");
             chatButton.href = `/chat/${id}`;
             chatButton.innerText = "Chat Now";

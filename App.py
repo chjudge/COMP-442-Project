@@ -507,7 +507,7 @@ def get_other_profile(user_id):  # Rename eventually
 @login_required
 def get_chat_page(other_user_id):
     # return render_template('chat.html', room = session['room'])
-    other_user = User.query.filter_by(id=other_user_id).first()
+    other_user = UserProfile.query.filter_by(id=other_user_id).first()
     if(other_user is not None and other_user.id != current_user.id):
         print('connected to chat')
 
@@ -555,6 +555,9 @@ def joined(message):
 # store and transmit message
 @socketio.on('text')
 def text(message):
+    # gets user profile so name can be used
+    user_profile = UserProfile.query.filter_by(
+        id=current_user.get_id()).first()
     room = session.get('room')
     print(f'{message["sent"]} said {message["msg"]} to {message["to"]}')
 
@@ -564,7 +567,7 @@ def text(message):
     db.session.commit()
 
     emit('message', {
-         'msg': f'{current_user.email} : {message["msg"]}'}, room=room)
+         'msg': f'{user_profile.fname} : {message["msg"]}'}, room=room)
 
 
 # run application

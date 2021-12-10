@@ -60,7 +60,7 @@
     </nav>
   </header>
 
-  <h1 id="title">Chat with {{ other_user.email }}</h1>
+  <h1 id="title">Chat with {{ other_user.fname }} {{ other_user.lname}}</h1>
   <div id="chat" class="col-6 mh-100 overflow-auto py-2">
     {% for chat in chats %}
     <p>{{ chat[0] }} : {{chat[1]}}</p>
