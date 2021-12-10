@@ -67,9 +67,9 @@
   <div id="chat" class="col-12 overflow-auto py-2">
     {% for chat in chats %}
     {% if user.email == chat[0] %}
-    <p class="sender">{{ chat[0] }} : {{chat[1]}}</p>
+    <p class="sender">{{ chat[1] }} : {{chat[2]}}</p>
     {% else %}
-    <p class="reciever">{{ chat[0] }} : {{chat[1]}}</p>
+    <p class="reciever">{{ chat[1] }} : {{chat[2]}}</p>
     {% endif %}
     {% endfor %}
   </div>
