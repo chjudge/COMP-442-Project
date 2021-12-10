@@ -18,7 +18,47 @@
 </head>
 
 <body>
-
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <div class="container">
+        <a class="navbar-brand" href="{{ url_for('index') }}"><img src="/static/images/logo.png" alt="Logo"
+            class="img-fluid" /></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+          aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav mx-lg-auto">
+            <li class="nav-item">
+              <a class="nav-link active" href="{{ url_for('get_homepage') }}"> Find Your Connection </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="{{ url_for('get_profile') }}"> Profile </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="{{ url_for('get_chat_view') }}"> Chat </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" href="{{ url_for('get_about_page') }}"> About Us </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" href="#">Contact Us</a>
+            </li>
+          </ul>
+          {% if user.is_authenticated %}
+          {% if user.admin == True %}
+          <a class="btn btn-light ms-3" href="{{ url_for('get_admin_page') }}"> Admin Page </a>
+          {% endif %}
+          <a class="btn btn-light ms-3" href="{{ url_for('get_logout') }}"> Logout </a>
+          {% else %}
+          <a class="btn btn-light ms-3" href="{{ url_for('get_login') }}"> Login </a>
+          <a class="btn btn-light ms-3" href="{{ url_for('get_register') }}"> Register </a>
+          {% endif %}
+        </div>
+      </div>
+      </div>
+    </nav>
+  </header>
 
   <h1 id="title">Chat with {{ other_user.email }}</h1>
   <div id="chat" class="col-6 mh-100 overflow-auto py-2">
