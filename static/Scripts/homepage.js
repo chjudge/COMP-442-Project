@@ -178,30 +178,46 @@ async function viewProfile(id) {
             content.id = "content";
             contentDiv.appendChild(content);
 
+            const nameAgeGender = document.createElement("h2");
+            nameAgeGender.classList.add("name-age-gender");
+            nameAgeGender.innerText = data.profile.fname + " " + data.profile.lname +
+                ", " + data.profile.age + ", " + data.profile.gender;
+            content.appendChild(nameAgeGender);
+
             const bioTitle = document.createElement("h3");
             bioTitle.classList.add("current-profile-titles");
             bioTitle.innerText = "Bio";
-            content.appendChild(bioTitle);
             const bio = document.createElement("p");
             bio.classList.add("current-profile-content");
             bio.innerText = data.profile.bio;
             bioTitle.appendChild(bio);
+            insertAfter(bioTitle, nameAgeGender);
 
-            const interestsTitle = document.createElement("h3");
-            interestsTitle.classList.add("current-profile-titles");
-            insertAfter(interestsTitle, bioTitle);
-            const interests = document.createElement("p");
-            interests.classList.add("current-profile-content");
-            interests.innerText = data.profile.interests;
-            interestsTitle.appendChild(interests);
+            // const interestsTitle = document.createElement("h3");
+            // interestsTitle.classList.add("current-profile-titles");
+            // interestsTitle.innerText = "Likes";
+            // insertAfter(interestsTitle, bioTitle);
+            // const interests = document.createElement("p");
+            // interests.classList.add("current-profile-content");
+            // interests.innerText = data.profile.interests;
+            // interestsTitle.appendChild(interests);
 
-            const dislikesTitle = document.createElement("h3");
-            dislikesTitle.classList.add("current-profile-titles");
-            insertAfter(dislikesTitle, interestsTitle);
-            const dislikes = document.createElement("p");
-            dislikes.classList.add("current-profile-content");
-            dislikes.innerText = data.profile.dislikes;
-            dislikesTitle.appendChild(dislikes);
+            // const dislikesTitle = document.createElement("h3");
+            // dislikesTitle.classList.add("current-profile-titles");
+            // dislikesTitle.innerText = "Dislikes";
+            // insertAfter(dislikesTitle, interestsTitle);
+            // const dislikes = document.createElement("p");
+            // dislikes.classList.add("current-profile-content");
+            // dislikes.innerText = data.profile.dislikes;
+            // dislikesTitle.appendChild(dislikes);
+
+            const chatButton = document.createElement("a");
+            chatButton.classList.add("btn");
+            chatButton.classList.add("btn-dark");
+            chatButton.classList.add("ms-3");
+            chatButton.href = `/chat/${id}`;
+            chatButton.innerText = "Chat Now";
+            insertAfter(chatButton, bioTitle);
 
             document.body.style.overflow = "hidden";
             profile.style.display = "block";

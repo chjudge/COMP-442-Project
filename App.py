@@ -121,8 +121,9 @@ class UserProfile(db.Model):
             "lname": self.lname,
             "gender": self.gender,
             "bio": self.bio,
-            "interests": self.interests,
-            "dislikes": self.dislikes
+            "age": self.age,
+            # "interests": self.interests,
+            # "dislikes": self.dislikes
         }
 
 
@@ -531,6 +532,9 @@ def get_chat_page(other_user_id):
         return render_template('chat.html', user=current_user, other_user=other_user, chats=chats)
     return redirect(url_for('index'))
 
+@app.get("/chat/")
+def get_chat_view():
+    pass
 
 def show_logs(it):
     pass
@@ -562,3 +566,4 @@ def text(message):
 # run application
 if __name__ == '__main__':
     socketio.run(app, debug=True)
+
