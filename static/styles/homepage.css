@@ -29,10 +29,34 @@ body {
 }
 
 #pfp {
-    height: 80vh
+    margin: 1em;
+    max-width: 90%;
+    max-height: 80vh;
+}
+
+#current-profile {
+    text-align: center;
+    display: none;
+    position: fixed;
+    z-index: 8;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
 #current-profile-content {
+    margin-top: 5vh;
+    position: fixed;
+    left: 50%;
+    transform: translate(-50%, 0);
+    border: 1px solid #999;
+    width: 60%;
+    max-height: 90vh;
+    background-color: white;
     text-align: center;
     overflow-y: scroll;
     border-radius: 10px;
