@@ -1,3 +1,4 @@
+from sqlalchemy.orm import backref
 from werkzeug.datastructures import MultiDict
 from werkzeug.utils import secure_filename
 from forms import ProfileForm, RegisterForm, LoginForm, PreferencesForm
@@ -144,7 +145,7 @@ class ChatLogs(db.Model):
         db.Integer, db.ForeignKey('users.id'), nullable=False)
     content = db.Column(db.Unicode, nullable=False)
 
-# db.drop_all() # (K) Added this to fix querying issues. Use it as needed
+#db.drop_all() # (K) Added this to fix querying issues. Use it as needed
 db.create_all()
 
 # show user registration form
@@ -408,7 +409,11 @@ def get_admin_page():
     if User.query.filter_by(id=current_user.get_id()).first().admin:
         users = User.query.all()
         profiles = UserProfile.query.all()
-        return render_template('admin.html', user=current_user, users=users, profiles=profiles)
+        names = {}
+        for user in profiles:
+            names[user.id] = f"{user.fname} {user.lname}"
+        print(names)
+        return render_template('admin.html', user=current_user, users=users, profiles=names)
     # non-admin users can't view the page
     else:
         return redirect(url_for('index'))
@@ -426,6 +431,8 @@ def post_admin_page():
                 db.session.delete(
                     UserProfile.query.filter_by(id=user_id).first())
                 db.session.delete(user)
+                db.session.delete(
+                    UserPreferences.query.filter_by(id=user_id).first())
                 db.session.commit()
                 flash(f'User #{user_id} has been removed')
         elif request.form.get('view_profile') is not None:

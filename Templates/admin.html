@@ -39,8 +39,7 @@
     <thead>
       <tr>
         <th>User ID</th>
-        <th>First Name</th>
-        <th>Last Name</th>
+        <th>Name</th>
         <th>Email Address</th>
         <th>Admin Status</th>
         <th>Remove User</th>
@@ -50,8 +49,7 @@
       {% for user in users %}
       <tr>
         <td>{{ user.id }}</td>
-        <td>{{ profiles[user.id-1].fname }}</td>
-        <td>{{ profiles[user.id-1].lname }}</td>
+        <td>{{ profiles[user.id] }}</td>
         <td>
           <form action="#" method="post">
             <button value={{user.id}} name="view_profile" type="submit" title="View profile" class="btn btn-link">{{ user.email }}</button>
