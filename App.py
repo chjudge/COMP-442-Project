@@ -138,7 +138,7 @@ class UserPreferences(db.Model):
 class ChatLogs(db.Model):
     __tablename__ = 'chat_logs'
     time = db.Column(db.DateTime(timezone=True),
-                     primary_key=True, nullable=False)
+        primary_key=True, nullable=False)
     room = db.Column(db.Integer, nullable=False)
     sender = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     recipient = db.Column(
@@ -146,27 +146,21 @@ class ChatLogs(db.Model):
     content = db.Column(db.Unicode, nullable=False)
 
 # db.drop_all() # (K) Added this to fix querying issues. Use it as needed
-# db.create_all()
+db.create_all()
 
 # show user registration form
-
-
 @app.get('/register/')
 def get_register():
     r_form = RegisterForm()
     return render_template('register.html', form=r_form)
 
 # show user login form
-
-
 @app.get('/login/')
 def get_login():
     l_form = LoginForm()
     return render_template('login.html', form=l_form)
 
 # validate registration form
-
-
 @app.post('/register/')
 def post_register():
     r_form = RegisterForm()
@@ -237,8 +231,6 @@ def post_login():
         return redirect(url_for('get_login'))
 
 # logout user account
-
-
 @app.get('/logout/')
 @login_required
 def get_logout():
@@ -247,8 +239,6 @@ def get_logout():
     return redirect(url_for('index'))
 
 # display user's profile information
-
-
 @app.get('/profile/')
 @login_required
 def get_profile():
@@ -313,8 +303,6 @@ def post_update_profile():
     return redirect(url_for('get_update_profile'))
 
 # post for initially creating profile
-
-
 @app.post('/profile/')
 @login_required
 def post_profile():
@@ -415,8 +403,6 @@ def post_update_preferences():
     return redirect(url_for("get_profile"))
 
 # show admin only page, view and remove users
-
-
 @app.get('/admin/')
 @login_required
 def get_admin_page():
@@ -429,8 +415,6 @@ def get_admin_page():
         return redirect(url_for('index'))
 
 # update database from admin page
-
-
 @app.post('/admin/')
 @login_required
 def post_admin_page():
@@ -466,8 +450,6 @@ def post_admin_page():
         return redirect(url_for('index'))
 
 # return default page
-
-
 @app.get('/')
 def index():
     return render_template("welcome.html", user=current_user)
@@ -522,8 +504,6 @@ def get_other_profile(user_id):  # Rename eventually
     })
 
 # connect user to chat with other user
-
-
 @app.get('/chat/<int:other_user_id>/')
 @login_required
 def get_chat_page(other_user_id):
@@ -556,8 +536,6 @@ def show_logs(it):
     pass
 
 # notify that other user is online
-
-
 @socketio.on('joined')
 def joined(message):
     print(f'{current_user.email} joined')
@@ -567,8 +545,6 @@ def joined(message):
     #      'msg': f'{current_user.email} is online'}, room=room)
 
 # store and transmit message
-
-
 @socketio.on('text')
 def text(message):
     room = session.get('room')
