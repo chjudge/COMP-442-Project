@@ -207,8 +207,6 @@ def post_register():
         return redirect(url_for('get_register'))
 
 # validate login form
-
-
 @app.post('/login/')
 def post_login():
     l_form = LoginForm()
@@ -263,15 +261,13 @@ def get_profile():
     return render_template('profile.html', user=current_user, profile=user_profile, preferences=user_preferences, form=p_form, update=False)
 
 # allow user to update
-
-
 @app.get('/profile/update/')
 @login_required
 def get_update_profile():
     user_profile = UserProfile.query.filter_by(
         id=current_user.get_id()).first()
     p_form = ProfileForm(formdata=MultiDict({"fname": user_profile.fname, "lname": user_profile.lname, "age": user_profile.age,
-                                             "gender": user_profile.gender, "bio": user_profile.bio, "picture": user_profile.picture}))
+        "gender": user_profile.gender, "bio": user_profile.bio, "picture": user_profile.picture}))
     print(user_profile.picture)
     return render_template('profile.html', user=current_user, profile=user_profile, form=p_form, update=True)
 
