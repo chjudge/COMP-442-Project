@@ -6,7 +6,8 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+  <meta id="user_id" content="{{user.id}}">
+  <meta id="other_user_id" content="{{other_user.id}}">
   <!-- Bootstrap CSS v5.0.2 -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -15,43 +16,15 @@
 
 <body>
 
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
-  <script type="text/javascript" charset="utf-8">
-    var socket;
-    window.addEventListener('DOMContentLoaded', (event) => {
-      console.log(`loaded`);
-      socket = io.connect(`http://${document.domain}:${location.port}`);
-      socket.on('connect', function () {
-        console.log(`joined`);
-        socket.emit('joined', {});
-      });
-      socket.on('status', function (data) {
-        document.querySelector('#chat').textContent = `${document.querySelector('#chat').textContent}<${data.msg}>\n`;
-        document.querySelector('#chat').scrollTop = document.querySelector('#chat').scrollHeight;
-      });
-      socket.on('message', function (data) {
-        document.querySelector('#chat').textContent = `${document.querySelector('#chat').textContent}${data.msg}\n`;
-        document.querySelector('#chat').scrollTop = document.querySelector('#chat').scrollHeight;
-      });
-      let textBox = document.querySelector('#text')
 
-      textBox.addEventListener('keydown', (e) => {
-        var code = e.key;
-        if (code === `Enter`) {
-          let text = textBox.value;
-          textBox.value = '';
-          if (text != '') {
-            console.log(text);
-            socket.emit('text', { msg: text });
-          }
-        }
-      });
-    });
-
-  </script>
-  <h1>Chat {{ room }}</h1>
-  <textarea id="chat" cols="80" rows="20"></textarea><br><br>
-  <input id="text" size="80" placeholder="Enter your message here"><br><br>
+  <h1 id="title">Chat with {{ other_user.email }}</h1>
+  <div id="chat" class="col-6 mh-100 overflow-auto py-2">
+    {% for chat in chats %}
+    <p>{{ chat[0] }} : {{chat[1]}}</p>
+    {% endfor %}
+  </div>
+  <!-- <textarea id="chat" cols="80" rows="20">{% for chat in chats %}{{ chat[0] }} : {{chat[1]}}{% endfor %}</textarea><br><br> -->
+  <input id="text" size="80" placeholder="Enter your message here">
 
 
   <!-- <script src="/static/scripts/chat.js"></script> -->
@@ -62,6 +35,45 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
     integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
     crossorigin="anonymous"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+  <script type="text/javascript" charset="utf-8">
+    let socket;
+    window.addEventListener('DOMContentLoaded', (event) => {
+      console.log(`loaded`);
+      let userID = parseInt(document.querySelector('#user_id').getAttribute('content'))
+      let otherUserID = parseInt(document.querySelector('#other_user_id').getAttribute('content'))
+      socket = io.connect(`http://${document.domain}:${location.port}`);
+      socket.on('connect', function () {
+        console.log(`joined`);
+        socket.emit('joined', {});
+      });
+      socket.on('status', function (data) {
+        let title = document.querySelector('#title');
+        title.textContent = `${title.textContent} ${data.msg}\n`;
+      });
+      socket.on('message', function (data) {
+        let chat = document.querySelector('#chat')
+        let text = document.createElement('p')
+        text.textContent = data.msg
+        chat.appendChild(text)
+        // document.querySelector('#chat').scrollTop = document.querySelector('#chat').scrollHeight;
+      });
+      let textBox = document.querySelector('#text')
+
+      textBox.addEventListener('keydown', (e) => {
+        var code = e.key;
+        if (code === `Enter`) {
+          let text = textBox.value;
+          textBox.value = '';
+          if (text != '') {
+            console.log(text);
+            socket.emit('text', { msg: text, sent: userID, to: otherUserID });
+          }
+        }
+      });
+    });
+
+  </script>
 </body>
 
 </html>
