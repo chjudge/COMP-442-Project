@@ -126,7 +126,6 @@ class UserProfile(db.Model):
             # "dislikes": self.dislikes
         }
 
-
 class UserPreferences(db.Model):
     __tablename__ = "user_preferences"
     id = db.Column(db.Integer, db.ForeignKey("users.id"),
@@ -134,7 +133,6 @@ class UserPreferences(db.Model):
     gender = db.Column(db.Enum('Male', 'Female'), nullable=True)
     ageStart = db.Column(db.Integer, nullable=True)
     ageEnd = db.Column(db.Integer, nullable=True)
-
 
 class ChatLogs(db.Model):
     __tablename__ = 'chat_logs'
@@ -475,9 +473,9 @@ def get_profiles():
     if user_preferences.ageStart and user_preferences.ageEnd and user_preferences.gender:
         admin = User.query.filter(User.admin == True).all()
         profiles = UserProfile.query.filter(UserProfile.age <= user_preferences.ageEnd,
-                                            UserProfile.age >= user_preferences.ageStart,
-                                            UserProfile.gender == user_preferences.gender,
-                                            UserProfile.id != current_user.get_id()).all()
+            UserProfile.age >= user_preferences.ageStart,
+            UserProfile.gender == user_preferences.gender,
+            UserProfile.id != current_user.get_id()).all()
         for profile in profiles:
             for a in admin:
                 if profile.id == a.id:
@@ -534,7 +532,13 @@ def get_chat_page(other_user_id):
 
 @app.get("/chat/")
 def get_chat_view():
-    pass
+    chats = ChatLogs.query.filter(ChatLogs.sender == current_user.get_id()).all()
+    all_users = UserProfile.query.all()
+    names = {}
+    for user in all_users:
+        names[user.id] = user.fname + " " + user.lname
+    
+    return render_template("chat_view.html", chats = chats, user = current_user, names = names)
 
 def show_logs(it):
     pass
